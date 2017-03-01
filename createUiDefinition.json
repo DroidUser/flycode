@@ -64,8 +64,8 @@
       "clusterName": "[basics('clusterName')]",
       "clusterLoginUserName": "[basics('clusterLoginUserName')]",
       "sshUserName": "[basics('sshUserName')]",
-      "clusterLoginPassword": "[basics('clusterLoginPassword').password]",
-      "sshPassword": "[basics('sshPassword').password]"
+      "clusterLoginPassword": "[basics('clusterLoginPassword')]",
+      "sshPassword": "[basics('sshPassword')]"
     }
   }
 }
