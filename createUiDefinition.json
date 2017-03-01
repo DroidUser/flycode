@@ -1,0 +1,71 @@
+{
+  "handler": "Microsoft.Compute.MultiVm",
+  "version": "0.0.1-preview",
+  "parameters": {
+    "basics": [
+      {
+        "name": "clusterName",
+        "type": "Microsoft.Common.TextBox",
+        "label": "Cluster name",
+        "toolTip": "The name of the new Sample Linux cluster.",
+        "constraints": {
+          "required": true,
+          "regex": "^[a-z0-9]{3,24}$",
+          "validationMessage": "Cluster names must be between 3 and 24 characters long, and can contain only numbers and lowercase letters."
+        }
+      },
+      {
+        "name": "clusterLoginUserName",
+        "type": "Microsoft.Compute.UserNameTextBox",
+        "label": "Cluster Login User Name",
+        "toolTip": "Cluster login username for the hdinsight.",
+        "osPlatform": "Linux",
+        "constraints": {
+          "required": true
+        }
+      },
+      {
+        "name": "clusterLoginPassword",
+        "type": "Microsoft.Compute.CredentialsCombo",
+        "label": {
+          "password": "Cluster Login Password",
+          "confirmPassword": "Confirm password"
+        },
+        "constraints": {
+          "required": true
+        },
+        "osPlatform": "Windows"
+      },
+      {
+        "name": "sshUserName",
+        "type": "Microsoft.Compute.UserNameTextBox",
+        "label": "SSH User Name",
+        "toolTip": "SSH credentials can be used to remotely access the cluster.",
+        "osPlatform": "Linux",
+        "constraints": {
+          "required": true
+        }
+      },
+      {
+        "name": "sshPassword",
+        "type": "Microsoft.Compute.CredentialsCombo",
+        "label": {
+          "password": "SSH Login Password",
+          "confirmPassword": "Confirm password"
+        },
+        "constraints": {
+          "required": true
+        },
+        "osPlatform": "Windows"
+      }
+    ],
+    "steps": [],
+    "outputs": {
+      "clusterName": "[basics('clusterName')]",
+      "clusterLoginUserName": "[basics('clusterLoginUserName')]",
+      "sshUserName": "[basics('sshUserName')]",
+      "clusterLoginPassword": "[basics('clusterLoginPassword').password]",
+      "sshPassword": "[basics('sshPassword').password]"
+    }
+  }
+}
