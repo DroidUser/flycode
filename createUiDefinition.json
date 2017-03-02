@@ -32,7 +32,8 @@
           "confirmPassword": "Confirm password"
         },
         "constraints": {
-          "required": true
+          "required": true,
+          "regex": "^(?=.*\\\\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\\\\d]{8,}$"
         },
         "osPlatform": "Windows"
       },
