@@ -33,7 +33,7 @@
         },
         "constraints": {
           "required": true,
-          "regex": "^(?=.*\\\\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\\\\d]{8,}$",
+          "regex": "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\\d]{8,}$",
           "validationMessage": "The password must be at least 8 characters in length and must contain at least one digit, one non-alphanumeric character, one upper case letter and one lower case letter. Also, the password should not contain 3 consecutive letters from the username"
         },
         "osPlatform": "Windows"
@@ -57,7 +57,7 @@
         },
         "constraints": {
           "required": true,
-          "regex": "^(?=.*\\\\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\\\\d]{8,}$",
+          "regex": "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\\d]{8,}$",
           "validationMessage": "The password must be at least 8 characters in length and must contain at least one digit, one non-alphanumeric character, one upper case letter and one lower case letter. Also, the password should not contain 3 consecutive letters from the username"
         },
         "osPlatform": "Windows"
