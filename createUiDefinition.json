@@ -32,7 +32,9 @@
           "confirmPassword": "Confirm password"
         },
         "constraints": {
-          "required": true
+          "required": true,
+          "regex": "^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$",
+          "validationMessage": "The password must be at least 8 characters in length and must contain at least one digit, one non-alphanumeric character, one upper case letter and one lower case letter. Also, the password should not contain 3 consecutive letters from the username"
         },
         "osPlatform": "Windows"
       },
@@ -54,7 +56,9 @@
           "confirmPassword": "Confirm password"
         },
         "constraints": {
-          "required": true
+          "required": true,
+          "regex": "^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$",
+          "validationMessage": "The password must be at least 8 characters in length and must contain at least one digit, one non-alphanumeric character, one upper case letter and one lower case letter. Also, the password should not contain 3 consecutive letters from the username"
         },
         "osPlatform": "Windows"
       }
@@ -64,8 +68,8 @@
       "clusterName": "[basics('clusterName')]",
       "clusterLoginUserName": "[basics('clusterLoginUserName')]",
       "sshUserName": "[basics('sshUserName')]",
-      "clusterLoginPassword": "[basics('clusterLoginPassword')]",
-      "sshPassword": "[basics('sshPassword')]"
+      "clusterLoginPassword": "[basics('clusterLoginPassword').password]",
+      "sshPassword": "[basics('sshPassword').password]"
     }
   }
 }
