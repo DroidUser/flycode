@@ -161,6 +161,8 @@ deploy_app(){
 	expect "Infoworks UI"
 	send "\n"
 
+	interact
+	
 	if [ "$?" != "0" ]; then
 		return 1;
 	fi
