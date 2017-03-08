@@ -128,7 +128,7 @@ export -f _get_spark_server_hostname
 
 deploy_app(){
 
-	echo "[$(date +"%m-%d-%Y %T")] Started deployment"i
+	echo "[$(date +"%m-%d-%Y %T")] Started deployment"
         _get_namenode_hostname namenode_hostname `hostname -f`
 	hiveserver_hostname="hive2://$namenode_hostname:10000"
 	sparkmaster_hostname="spark://$namenode_hostname:7077"
