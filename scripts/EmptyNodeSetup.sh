@@ -1,12 +1,15 @@
 #!/bin/bash
 #source ~/.bashrc
+
 export app_path=http://54.221.70.148:8081/artifactory/infoworks-release/io/infoworks/release/1.9.1-azure/infoworks-1.9.1-azure.tar.gz
 export app_name=infoworks
 export iw_home=/opt/${app_name}
 export configured_status_file=configured
 export username=infoworks-user
 export password=welcome
-create_user(){
+
+#create system user with sudo permission
+_create_user(){
 
 	echo "[$(date +"%m-%d-%Y %T")] Creating user $username"
 	{
@@ -32,7 +35,7 @@ create_user(){
 	}
 }
 
-extract(){
+_extract_file(){
 
 	echo "Extracting infoworks package $1"
 	if [ -f $1 ] ; then
@@ -46,14 +49,16 @@ extract(){
 	fi
 }
 
-download_app(){
+
+#download infoworks package
+_download_app(){
 
 	echo "[$(date +"%m-%d-%Y %T")] Started downloading application from "${app_path}
 	{
 		eval cd /opt/ && wget ${app_path} && {
 			for i in `ls -a`; do
 				if [[ ($app_path =~ .*$i.*) && -f $i ]]; then
-					extract $i;
+					_extract_file $i;
 				fi
 			done
 		} || return 1;
@@ -65,27 +70,28 @@ download_app(){
 	}
 }
 
+#find active namenode of the cluster
 _get_namenode_hostname(){
 
     return_var=$1
     default=$2
 
-    haClusterName=`hdfs getconf -confKey dfs.nameservices`
+    hadoop_cluster_name=`hdfs getconf -confKey dfs.nameservices`
 
-    if [ $? -ne 0 -o -z "$haClusterName" ]; then
-        echo "Unable to fetch HA ClusterName"
+    if [ $? -ne 0 -o -z "$hadoop_cluster_name" ]; then
+        echo "Unable to fetch Hadoop Cluster Name"
         exit 1
     fi
 
-    nameNodeIdString=`hdfs getconf -confKey dfs.ha.namenodes.$haClusterName`
+    namenode_id_string=`hdfs getconf -confKey dfs.ha.namenodes.$hadoop_cluster_name`
 
 
-    for nameNodeId in `echo $nameNodeIdString | tr "," " "`
+    for namenode_id in `echo $namenode_id_string | tr "," " "`
     do
-        status=`hdfs haadmin -getServiceState $nameNodeId`
+        status=`hdfs haadmin -getServiceState $namenode_id`
         if [ $status = "active" ]; then
-            nameNode=`hdfs getconf -confKey dfs.namenode.https-address.$haClusterName.$nameNodeId`
-            IFS=':' read -ra $return_var<<< "$nameNode"
+            active_namenode=`hdfs getconf -confKey dfs.namenode.https-address.$hadoop_cluster_name.$namenode_id`
+            IFS=':' read -ra $return_var<<< "$active_namenode"
             if [ "${!return_var}" == "" ]; then
                     eval $return_var="'$default'"
             fi
@@ -96,90 +102,63 @@ _get_namenode_hostname(){
 export -f _get_namenode_hostname
 
 
-_get_hive_server_hostname(){
-    return_var=$1
-    default=$2
-
-    _get_namenode_hostname hive_var $default
-
-    $return_var="hive2://$hive_var:10000"
-
-    if [ "${!return_var}" == "" ]; then
-        eval $return_var="hive2://'$default':10000"
-    fi
-}
-export -f _get_hive_server_hostname
-
-
-_get_spark_server_hostname(){
-    return_var=$1
-    default=$2
-
-    _get_namenode_hostname spark_var $default
-
-    $return_var="spark://$spark_var:7077"
-
-    if [ "${!return_var}" == "" ]; then
-        eval $return_var="spark://'$default':7077"
-    fi
-}
-export -f _get_spark_server_hostname
-
-
-deploy_app(){
+_deploy_app(){
 
 	echo "[$(date +"%m-%d-%Y %T")] Started deployment"
-        _get_namenode_hostname namenode_hostname `hostname -f`
+    _get_namenode_hostname namenode_hostname `hostname -f`
 	hiveserver_hostname="hive2://$namenode_hostname:10000"
 	sparkmaster_hostname="spark://$namenode_hostname:7077"
 
+	#input parameters prompted by start.sh
 	expect <<-EOF
-	spawn su -c "$iw_home/bin/start.sh all" -s /bin/sh $username
+		spawn su -c "$iw_home/bin/start.sh all" -s /bin/sh $username
 
-	expect "HDP installed"
-	sleep 1
-	send "\n"
+		expect "HDP installed"
+		sleep 1
+		send "\n"
 
-	expect "namenode"
-        sleep 1
-	send $namenode_hostname\n
+		expect "namenode"
+	        sleep 1
+		send $namenode_hostname\n
 
-	expect "Enter the path for infoworks hdfs home"
-        sleep 1
-	send "\n"
+		expect "Enter the path for infoworks hdfs home"
+	        sleep 1
+		send "\n"
 
-	expect "HiveServer2"
-        sleep 1
-	send $hiveserver_hostname\n
+		expect "HiveServer2"
+	        sleep 1
+		send $hiveserver_hostname\n
 
-	expect "username"
-        sleep 1
-	send "\n"
+		expect "username"
+	        sleep 1
+		send "\n"
 
-	expect "password"
-        sleep 1
-	send "\n"
+		expect "password"
+	        sleep 1
+		send "\n"
 
-	expect "hive schema"
-        sleep 1
-	send "\n"
+		expect "hive schema"
+	        sleep 1
+		send "\n"
 
-	expect "Spark master"
-        sleep 1
-	send $sparkmaster_hostname\n
+		expect "Spark master"
+	        sleep 1
+		send $sparkmaster_hostname\n
 
-	expect "Infoworks UI"
-        sleep 1
-	send "\n"
+		expect "Infoworks UI"
+	        sleep 1
+		send "\n"
 
-	interact
+		interact
 	EOF
+
 	if [ "$?" != "0" ]; then
 		return 1;
 	fi
 }
-export -f deploy_app
+
 #install expect tool for interactive mode to input paramenters
 apt-get --assume-yes install expect
-#[ $? != "0" ] && echo "Could not install 'expect' plugin" && exit 
-eval create_user && download_app && deploy_app && [ -f $configured_status_file ] && echo "Application deployed successfully"  || echo "Deployment failed"
+[ $? != "0" ] && echo "Could not install 'expect' plugin" && exit 
+
+eval _create_user && _download_app && _deploy_app && [ -f $configured_status_file ] && echo "Application deployed successfully"  || echo "Deployment failed"
