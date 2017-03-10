@@ -158,11 +158,13 @@
             "label": "Zookeeper Node",
             "toolTip": "The size of virtual machine to provision for each cluster node.",
             "recommendedSizes": [
-              "Standard_D1",
-              "Standard_D2"
+              "A3",
+              "A4"
             ],
             "constraints": {
               "allowedSizes": [
+                "A3",
+                "A4",
                 "Standard_D1",
                 "Standard_D2",
                 "Standard_D3",
