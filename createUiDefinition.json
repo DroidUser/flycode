@@ -120,13 +120,9 @@
             ],
             "constraints": {
               "allowedSizes": [
-                "A5",
-                "A6",
-                "A7",
-                "EXTRALARGE",
-                "LARGE",
-                "MEDIUM",
-                "SMALL",
+                "STANDARD_A5",
+                "STANDARD_A6",
+                "STANDARD_A7",
                 "STANDARD_D1",
                 "STANDARD_D1_V2",
                 "STANDARD_D11",
@@ -161,13 +157,9 @@
             ],
             "constraints": {
               "allowedSizes": [
-                "A5",
-                "A6",
-                "A7",
-                "EXTRALARGE",
-                "LARGE",
-                "MEDIUM",
-                "SMALL",
+                "STANDARD_A5",
+                "STANDARD_A6",
+                "STANDARD_A7",
                 "STANDARD_D1",
                 "STANDARD_D1_V2",
                 "STANDARD_D11",
@@ -196,21 +188,17 @@
             "label": "Zookeeper Node",
             "toolTip": "The size of virtual machine to provision for each cluster node.",
             "recommendedSizes": [
-              "A3",
-              "A4",
-              "A5"
+              "STANDARD_A3",
+              "STANDARD_A4",
+              "STANDARD_A5"
             ],
             "constraints": {
               "allowedSizes": [
-                "A3",
-                "A4",
-                "A5",
-                "A6",
-                "A7",
-                "EXTRALARGE",
-                "LARGE",
-                "MEDIUM",
-                "SMALL",
+                "STANDARD_A3",
+                "STANDARD_A4",
+                "STANDARD_A5",
+                "STANDARD_A6",
+                "STANDARD_A7",
                 "STANDARD_D1",
                 "STANDARD_D1_V2",
                 "STANDARD_D11",
