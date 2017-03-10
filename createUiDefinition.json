@@ -160,8 +160,6 @@
             "recommendedSizes": [
               "Standard_D1",
               "Standard_D2",
-              "Standard_D3",
-              "Standard_D4"
             ],
             "constraints": {
               "allowedSizes": [
