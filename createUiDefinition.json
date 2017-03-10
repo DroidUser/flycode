@@ -15,33 +15,52 @@
         }
       },
       {
-        "name": "adminUsername",
+        "name": "clusterLoginUserName",
         "type": "Microsoft.Compute.UserNameTextBox",
-        "label": "Username",
-        "toolTip": "Admin username for the virtual machines. Same Credientials is to SSH to the box.",
-        "osPlatform": "Linux"
-      },
-      {
-        "name": "SSHCredntials",
-        "type": "Microsoft.Compute.CredentialsCombo",
-        "label": {
-          "authenticationType": "Authentication type",
-          "password": "Password",
-          "confirmPassword": "Confirm password",
-          "sshPublicKey": "SSH public key"
-        },
-        "toolTip": {
-          "authenticationType": "",
-          "password": "",
-          "sshPublicKey": ""
-        },
+        "label": "Cluster Login User Name",
+        "toolTip": "Cluster login username for the hdinsight.",
+        "osPlatform": "Linux",
         "constraints": {
           "required": true
+        }
+      },
+      {
+        "name": "clusterLoginPassword",
+        "type": "Microsoft.Common.PasswordBox",
+        "label": {
+          "password": "Cluster Login Password",
+          "confirmPassword": "Confirm password"
         },
-        "options": {
-          "hideConfirmation": false
+        "constraints": {
+          "required": true,
+          "regex": "^(?=.*[^a-zA-Z])(?=.*[a-z])(?=.*[A-Z])\\S{8,}$",
+          "validationMessage": "The password must be at least 8 characters in length and must contain at least one digit, one non-alphanumeric character, one upper case letter and one lower case letter. Also, the password should not contain 3 consecutive letters from the username"
         },
-        "osPlatform": "Linux"
+        "osPlatform": "Windows"
+      },
+      {
+        "name": "sshUserName",
+        "type": "Microsoft.Compute.UserNameTextBox",
+        "label": "SSH User Name",
+        "toolTip": "SSH credentials can be used to remotely access the cluster.",
+        "osPlatform": "Linux",
+        "constraints": {
+          "required": true
+        }
+      },
+      {
+        "name": "sshPassword",
+        "type": "Microsoft.Common.PasswordBox",
+        "label": {
+          "password": "SSH Login Password",
+          "confirmPassword": "Confirm password"
+        },
+        "constraints": {
+          "required": true,
+          "regex": "^(?=.*[^a-zA-Z])(?=.*[a-z])(?=.*[A-Z])\\S{8,}$",
+          "validationMessage": "The password must be at least 8 characters in length and must contain at least one digit, one non-alphanumeric character, one upper case letter and one lower case letter. Also, the password should not contain 3 consecutive letters from the username"
+        },
+        "osPlatform": "Windows"
       }
     ],
     "steps": [
@@ -95,17 +114,36 @@
             "label": "Worker Nodes",
             "toolTip": "The size of virtual machine to provision for each cluster node.",
             "recommendedSizes": [
-              "Standard_D1",
-              "Standard_D2",
-              "Standard_D3",
-              "Standard_D4"
+              "STANDARD_D3_V2",
+              "Standard_D12_V2",
+              "STANDARD_D13_V2"
             ],
             "constraints": {
               "allowedSizes": [
-                "Standard_D1",
-                "Standard_D2",
-                "Standard_D3",
-                "Standard_D4"
+                "A5",
+                "A6",
+                "A7",
+                "EXTRALARGE",
+                "LARGE",
+                "MEDIUM",
+                "SMALL",
+                "STANDARD_D1",
+                "STANDARD_D1_V2",
+                "STANDARD_D11",
+                "STANDARD_D11_V2",
+                "STANDARD_D12",
+                "STANDARD_D12_V2",
+                "STANDARD_D13",
+                "STANDARD_D13_V2",
+                "STANDARD_D14",
+                "STANDARD_D14_V2",
+                "STANDARD_D2",
+                "STANDARD_D2_V2",
+                "STANDARD_D3",
+                "STANDARD_D3_V2",
+                "STANDARD_D4",
+                "STANDARD_D4_V2",
+                "STANDARD_D5_V2"
               ]
             },
             "osPlatform": "Linux",
@@ -117,17 +155,36 @@
             "label": "Head Nodes",
             "toolTip": "The size of virtual machine to provision for each cluster node.",
             "recommendedSizes": [
-              "Standard_D1",
-              "Standard_D2",
-              "Standard_D3",
-              "Standard_D4"
+              "STANDARD_D3_V2",
+              "Standard_D12_V2",
+              "STANDARD_D13_V2"
             ],
             "constraints": {
               "allowedSizes": [
-                "Standard_D1",
-                "Standard_D2",
-                "Standard_D3",
-                "Standard_D4"
+                "A5",
+                "A6",
+                "A7",
+                "EXTRALARGE",
+                "LARGE",
+                "MEDIUM",
+                "SMALL",
+                "STANDARD_D1",
+                "STANDARD_D1_V2",
+                "STANDARD_D11",
+                "STANDARD_D11_V2",
+                "STANDARD_D12",
+                "STANDARD_D12_V2",
+                "STANDARD_D13",
+                "STANDARD_D13_V2",
+                "STANDARD_D14",
+                "STANDARD_D14_V2",
+                "STANDARD_D2",
+                "STANDARD_D2_V2",
+                "STANDARD_D3",
+                "STANDARD_D3_V2",
+                "STANDARD_D4",
+                "STANDARD_D4_V2",
+                "STANDARD_D5_V2"
               ]
             },
             "osPlatform": "Linux",
@@ -139,17 +196,38 @@
             "label": "Zookeeper Node",
             "toolTip": "The size of virtual machine to provision for each cluster node.",
             "recommendedSizes": [
-              "Standard_D1",
-              "Standard_D2",
-              "Standard_D3",
-              "Standard_D4"
+              "A3",
+              "A4",
+              "A5"
             ],
             "constraints": {
               "allowedSizes": [
-                "Standard_D1",
-                "Standard_D2",
-                "Standard_D3",
-                "Standard_D4"
+                "A3",
+                "A4",
+                "A5",
+                "A6",
+                "A7",
+                "EXTRALARGE",
+                "LARGE",
+                "MEDIUM",
+                "SMALL",
+                "STANDARD_D1",
+                "STANDARD_D1_V2",
+                "STANDARD_D11",
+                "STANDARD_D11_V2",
+                "STANDARD_D12",
+                "STANDARD_D12_V2",
+                "STANDARD_D13",
+                "STANDARD_D13_V2",
+                "STANDARD_D14",
+                "STANDARD_D14_V2",
+                "STANDARD_D2",
+                "STANDARD_D2_V2",
+                "STANDARD_D3",
+                "STANDARD_D3_V2",
+                "STANDARD_D4",
+                "STANDARD_D4_V2",
+                "STANDARD_D5_V2"
               ]
             },
             "osPlatform": "Linux",
@@ -160,15 +238,14 @@
     ],
     "outputs": {
       "clusterName": "[basics('clusterName')]",
-      "adminUsername": "[basics('adminUsername')]",
+      "clusterLoginUserName": "[basics('clusterLoginUserName')]",
+      "sshUserName": "[basics('sshUserName')]",
+      "clusterLoginPassword": "[basics('clusterLoginPassword')]",
+      "sshPassword": "[basics('sshPassword')]",
       "clusterNodeCount": "[steps('SampleClusterConfig').clusterNodeCount]",
       "workerNodeVmSize": "[steps('SampleClusterConfig').workerNodeVmSize]",
       "headNodeVmSize": "[steps('SampleClusterConfig').headNodeVmSize]",
-      "zookeeperVmSize": "[steps('SampleClusterConfig').zookeeperVmSize]",
-      "location": "[location()]",
-      "authenticationType": "[basics('SSHCredntials').authenticationType]",
-      "password": "[basics('SSHCredntials').password]",
-      "sshKey": "[basics('SSHCredntials').sshPublicKey]"
+      "zookeeperVmSize": "[steps('SampleClusterConfig').zookeeperVmSize]"
     }
   }
 }
