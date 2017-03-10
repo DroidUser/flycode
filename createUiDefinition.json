@@ -114,32 +114,17 @@
             "label": "Worker Nodes",
             "toolTip": "The size of virtual machine to provision for each cluster node.",
             "recommendedSizes": [
-              "Standard_A5",
-              "Standard_A6",
-              "Standard_A7",
               "Standard_D1",
-              "Standard_D1_V2",
-              "Standard_D11",
-              "Standard_D11_V2",
-              "Standard_D12",
-              "Standard_D12_V2",
-              "Standard_D13",
-              "Standard_D13_V2",
-              "Standard_D14",
-              "Standard_D14_V2",
               "Standard_D2",
-              "Standard_D2_V2",
               "Standard_D3",
-              "Standard_D3_V2",
-              "Standard_D4",
-              "Standard_D4_V2",
-              "Standard_D5_V2"
+              "Standard_D4"
             ],
             "constraints": {
               "allowedSizes": [
-                "Standard_D3_V2",
-                "Standard_D12_V2",
-                "Standard_D13_V2"
+                "Standard_D1",
+                "Standard_D2",
+                "Standard_D3",
+                "Standard_D4"
               ]
             },
             "osPlatform": "Linux",
@@ -151,32 +136,17 @@
             "label": "Head Nodes",
             "toolTip": "The size of virtual machine to provision for each cluster node.",
             "recommendedSizes": [
-              "Standard_A5",
-              "Standard_A6",
-              "Standard_A7",
               "Standard_D1",
-              "Standard_D1_V2",
-              "Standard_D11",
-              "Standard_D11_V2",
-              "Standard_D12",
-              "Standard_D12_V2",
-              "Standard_D13",
-              "Standard_D13_V2",
-              "Standard_D14",
-              "Standard_D14_V2",
               "Standard_D2",
-              "Standard_D2_V2",
               "Standard_D3",
-              "Standard_D3_V2",
-              "Standard_D4",
-              "Standard_D4_V2",
-              "Standard_D5_V2"
+              "Standard_D4"
             ],
             "constraints": {
               "allowedSizes": [
-                "Standard_D3_V2",
-                "Standard_D12_V2",
-                "Standard_D13_V2"
+                "Standard_D1",
+                "Standard_D2",
+                "Standard_D3",
+                "Standard_D4"
               ]
             },
             "osPlatform": "Linux",
@@ -188,34 +158,17 @@
             "label": "Zookeeper Node",
             "toolTip": "The size of virtual machine to provision for each cluster node.",
             "recommendedSizes": [
-              "Standard_A3",
-              "Standard_A4",
-              "Standard_A5",
-              "Standard_A6",
-              "Standard_A7",
               "Standard_D1",
-              "Standard_D1_V2",
-              "Standard_D11",
-              "Standard_D11_V2",
-              "Standard_D12",
-              "Standard_D12_V2",
-              "Standard_D13",
-              "Standard_D13_V2",
-              "Standard_D14",
-              "Standard_D14_V2",
               "Standard_D2",
-              "Standard_D2_V2",
               "Standard_D3",
-              "Standard_D3_V2",
-              "Standard_D4",
-              "Standard_D4_V2",
-              "Standard_D5_V2"
+              "Standard_D4"
             ],
             "constraints": {
               "allowedSizes": [
-                "Standard_A3",
-                "Standard_A4",
-                "Standard_A5"
+                "Standard_D1",
+                "Standard_D2",
+                "Standard_D3",
+                "Standard_D4"
               ]
             },
             "osPlatform": "Linux",
