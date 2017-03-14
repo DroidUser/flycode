@@ -74,6 +74,14 @@
         "bladeTitle": "Cluster Size",
         "elements": [
           {
+            "name": "storageAccount",
+            "type": "Microsoft.Storage.StorageAccountSelector",
+            "label": "Storage account",
+            "defaultValue": {
+              "type": "Standard_LRS"
+            }
+          },
+          {
             "name": "clusterNodeCount",
             "type": "Microsoft.Common.DropDown",
             "label": "Number of Worker nodes",
