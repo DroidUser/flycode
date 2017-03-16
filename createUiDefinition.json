@@ -45,9 +45,6 @@
                 "Standard_LRS"
               ],
               "required": true
-            },
-            "options": {
-              "hideExisting": true
             }
           }
         ]
