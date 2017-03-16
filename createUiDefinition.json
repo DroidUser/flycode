@@ -21,6 +21,25 @@
           "password": "Admin password for the virtual machines."
         },
         "osPlatform": "Windows"
+      },
+      {
+        "handler": "Microsoft.HDInsight",
+        "version": "0.0.1-preview",
+        "clusterFilters": {
+          "types": [
+            "Hadoop",
+            "HBase",
+            "Storm",
+            "Spark"
+          ],
+          "tiers": [
+            "Standard",
+            "Premium"
+          ],
+          "versions": [
+            "3.4"
+          ]
+        }
       }
     ],
     "steps": [
