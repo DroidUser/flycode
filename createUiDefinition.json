@@ -62,7 +62,7 @@
           },
           {
             "name": "storageAccounts",
-            "type": "Microsoft.Storage.MultiStorageAccountCombo",
+            "type": "Microsoft.Storage.StorageAccountCombo",
             "label": {
               "prefix": "Storage account name prefix",
               "type": "Storage account type"
