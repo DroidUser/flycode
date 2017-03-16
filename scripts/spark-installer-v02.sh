@@ -1,3 +1,4 @@
+#!/bin/bash
 function download_file
 {
     srcurl=$1;
