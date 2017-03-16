@@ -61,11 +61,21 @@
             }
           },
           {
-            "name": "storageAccount",
-            "type": "Microsoft.Storage.StorageAccountSelector",
-            "label": "Storage account",
+            "name": "storageAccounts",
+            "type": "Microsoft.Storage.MultiStorageAccountCombo",
+            "label": {
+              "prefix": "Storage account name prefix",
+              "type": "Storage account type"
+            },
             "defaultValue": {
               "type": "Standard_LRS"
+            },
+            "count": 4,
+            "constraints": {
+              "allowedTypes": [
+                "Standard_LRS"
+              ],
+              "required": true
             }
           },
           {
