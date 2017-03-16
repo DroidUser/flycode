@@ -57,9 +57,7 @@
       "storageAccountNewOrExisting": "[steps('storageConfig').storageAccount.newOrExisting]",
       "StorageAccountName": "[steps('storageConfig').storageAccount.name]",
       "storageAccountType": "[steps('storageConfig').storageAccount.type]",
-      "existingStorageAccountRG": "[steps('storageConfig').storageAccount.resourceGroup]",
-      "vmSize": "[steps('infrastructureConfig').vmSize]",
-      "vmCount": "[steps('infrastructureConfig').vmCount]"
+      "existingStorageAccountRG": "[steps('storageConfig').storageAccount.resourceGroup]"
     }
   }
 }
