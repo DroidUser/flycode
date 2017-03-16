@@ -97,23 +97,6 @@
               "sku": "2012-R2-Datacenter"
             },
             "count": "[steps('infrastructureConfig').vmCount]"
-          },
-          {
-            "name": "dnsAndPublicIP",
-            "type": "Microsoft.Network.PublicIpAddressCombo",
-            "label": {
-              "publicIpAddress": "Public IP address",
-              "domainNameLabel": "DNS Prefix"
-            },
-            "toolTip": {
-              "domainNameLabel": "DNS Prefix for the VM public IP addresses."
-            },
-            "defaultValue": {
-              "publicIpAddressName": "publicIP"
-            },
-            "options": {
-              "hideNone": true
-            }
           }
         ]
       }
@@ -128,11 +111,7 @@
       "existingStorageAccountRG": "[steps('infrastructureConfig').storageAccount.resourceGroup]",
       "domainName": "[steps('infrastructureConfig').domainName]",
       "vmSize": "[steps('infrastructureConfig').vmSize]",
-      "vmCount": "[steps('infrastructureConfig').vmCount]",
-      "publicIPAddressName": "[steps('infrastructureConfig').DnsAndPublicIP.name]",
-      "dnsNameForPublicIP": "[steps('infrastructureConfig').dnsAndPublicIP.domainNameLabel]",
-      "existingIPRGName": "[steps('infrastructureConfig').dnsAndPublicIP.resourceGroup]",
-      "publicIPNewOrExisting": "[steps('infrastructureConfig').dnsAndPublicIP.newOrExistingOrNone]"
+      "vmCount": "[steps('infrastructureConfig').vmCount]"
     }
   }
 }
