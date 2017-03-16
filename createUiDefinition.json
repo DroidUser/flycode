@@ -124,17 +124,44 @@
             "count": "[steps('infrastructureConfig').vmCount]"
           }
         ]
+      },
+      {
+        "name": "storageConfig",
+        "label": "Infrastructure settings",
+        "subLabel": {
+          "preValidation": "Configure the storage settings",
+          "postValidation": "Done"
+        },
+        "bladeTitle": "Storage settings",
+        "elements": [
+          {
+            "name": "storageAccount",
+            "type": "Microsoft.Storage.StorageAccountSelector",
+            "label": "Storage account",
+            "defaultValue": {
+              "type": "Standard_LRS"
+            },
+            "constraints": {
+              "allowedTypes": [
+                "Standard_LRS"
+              ],
+              "required": true
+            },
+            "options": {
+              "hideExisting": true
+            }
+          }
+        ]
       }
     ],
     "outputs": {
       "location": "[location()]",
       "adminUsername": "[basics('adminUsername')]",
       "adminPassword": "[basics('adminPassword')]",
-      "storageAccountNewOrExisting": "[steps('infrastructureConfig').storageAccount.newOrExisting]",
-      "StorageAccountName": "[steps('infrastructureConfig').storageAccount.name]",
-      "storageAccountType": "[steps('infrastructureConfig').storageAccount.type]",
-      "existingStorageAccountRG": "[steps('infrastructureConfig').storageAccount.resourceGroup]",
-      "domainName": "[steps('infrastructureConfig').domainName]",
+      "storageAccountNewOrExisting": "[steps('storageConfig').storageAccount.newOrExisting]",
+      "StorageAccountName": "[steps('storageConfig').storageAccount.name]",
+      "storageAccountType": "[steps('storageConfig').storageAccount.type]",
+      "existingStorageAccountRG": "[steps('storageConfig').storageAccount.resourceGroup]",
       "vmSize": "[steps('infrastructureConfig').vmSize]",
       "vmCount": "[steps('infrastructureConfig').vmCount]"
     }
