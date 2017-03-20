@@ -115,7 +115,7 @@
       "nameNodeCount": 1,
       "dataNodeCount": 3,
       "masterVmSize": "Standard_A1",
-      "masterNodeTemplateUri": "[concat(parameters('gitUriPrefix'), '/cluster-node-16disk.json')]",
+      "masterNodeTemplateUri": "[concat(parameters('gitUriPrefix'), '/cluster-node-8disk.json')]"
       "workerVmSize": "Standard_A1",
       "workerNodeTemplateUri": "[concat(parameters('gitUriPrefix'), '/cluster-node-8disk.json')]"
     },
