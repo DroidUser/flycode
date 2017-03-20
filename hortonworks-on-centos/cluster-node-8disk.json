@@ -145,16 +145,6 @@
               },
               "caching": "None",
               "createOption": "Empty"
-            },
-            {
-              "name": "datadisk3",
-              "diskSizeGB": "1023",
-              "lun": 2,
-              "vhd": {
-                "Uri": "[concat('http://', parameters('storageAccountName'), '.blob.core.windows.net/vhds/', parameters('vmName'), '-datadisk2.vhd')]"
-              },
-              "caching": "None",
-              "createOption": "Empty"
             }
           ]
         },
