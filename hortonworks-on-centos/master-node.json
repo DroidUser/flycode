@@ -1,0 +1,114 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "dnsNamePrefix": {
+            "type": "string"
+        },
+        "region": {
+            "type": "string"
+        }, 
+        "scriptsUri": {
+            "type": "string"
+        },   
+        "nodeTemplateUri": {
+            "type": "string"
+        },           
+        "storageAccount" : {
+            "type": "object"        
+        },
+        "vmSize": {
+            "type": "string"
+        },
+        "vmSpec": {
+            "type": "object"
+        },
+        "networkSpec": {
+            "type": "object"
+        },
+        "clusterSpec": {
+            "type": "object"
+        }        
+    },
+    "variables": {
+        "vmName": "[concat(parameters('dnsNamePrefix'), '-mn-1')]",                
+        "storageAccountName": "[concat(parameters('storageAccount').prefix, 'mn1')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[variables('storageAccountName')]",
+            "apiVersion": "2015-05-01-preview",
+            "location": "[parameters('region')]",
+            "properties": {
+                "accountType": "[parameters('storageAccount').type]"
+            }
+        },
+        {
+            "name": "[variables('vmName')]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",            
+            "dependsOn": [                
+                "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[parameters('nodeTemplateUri')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "[variables('vmName')]"
+                    },
+                    "region": {
+                        "value": "[parameters('region')]"
+                    },
+                    "availabilitySet": {
+                        "value": "[parameters('vmSpec').masterNodeASName]"
+                    },                    
+                    "storageAccountName" : {
+                        "value": "[variables('storageAccountName')]"        
+                    },   
+                    "subnetResourceId": {
+                        "value": "[concat(resourceId('Microsoft.Network/virtualNetworks',parameters('networkSpec').virtualNetworkName), '/subnets/', parameters('networkSpec').virtualNetworkSubnetName)]"
+                    },
+                    "dnsName": {
+                        "value": "[concat(parameters('dnsNamePrefix'), '-mn-1')]"
+                    },
+                    "ipAddress": {
+                        "value": "[concat(parameters('networkSpec').privateIPPrefix, parameters('networkSpec').masterNodeAddress)]"
+                    },                    
+                    "vmSize": {
+                        "value": "[parameters('vmSize')]"
+                    },
+                    "vmSpec": {
+                        "value": "[parameters('vmSpec')]"
+                    }
+                }
+            }
+        },        
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(variables('vmName'), '/prepareDisks')]",
+            "apiVersion": "2015-05-01-preview",
+            "location": "[parameters('region')]",
+            "dependsOn": [
+                "[concat('Microsoft.Resources/deployments/', variables('vmName'))]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.OSTCExtensions",
+                "type": "CustomScriptForLinux",
+                "typeHandlerVersion": "1.2",
+                "settings": {
+                    "fileUris": [
+                        "[concat(parameters('scriptsUri'), '/scripts/initialize-master.sh')]",
+                        "[concat(parameters('scriptsUri'), '/scripts/mountDisk.sh')]",
+                        "[concat(parameters('scriptsUri'), '/scripts/vm-bootstrap.py')]"    
+                    ],
+                    "commandToExecute": "[concat('sh initialize-master.sh \"', parameters('networkSpec').privateIPPrefix, '\" \"', parameters('dnsNamePrefix'), '\" \"', reference(variables('vmName')).outputs.fqdn.value, '\" ', parameters('clusterSpec').nameNodeCount, ' ', parameters('clusterSpec').dataNodeCount, ' \"', parameters('vmSpec').adminUserName, '\"')]"                    
+                }
+            }
+        }
+    ]
+}
