@@ -114,9 +114,9 @@
     "clusterTshirtSizeEval": {
       "nameNodeCount": 1,
       "dataNodeCount": 3,
-      "masterVmSize": "Standard_A3",
+      "masterVmSize": "Standard_A1",
       "masterNodeTemplateUri": "[concat(parameters('gitUriPrefix'), '/cluster-node-16disk.json')]",
-      "workerVmSize": "Standard_A3",
+      "workerVmSize": "Standard_A1",
       "workerNodeTemplateUri": "[concat(parameters('gitUriPrefix'), '/cluster-node-8disk.json')]"
     },
     "clusterTshirtSizeSmall": {
