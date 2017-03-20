@@ -117,7 +117,7 @@
         }
     },
     "variables": {
-        "scriptsUri": "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/tree/master/hortonworks-on-centos",          
+        "scriptsUri": "https://raw.githubusercontent.com/DroidUser/flycode/master/hortonworks-on-centos",          
         "storageAccount": {
             "prefix": "[parameters('storageAccountPrefix')]",
             "type": "[parameters('storageAccountType')]"
