@@ -1,4 +1,6 @@
 #!/bin/bash
 #source ~/.bashrc
 
-mkdir aaa;
+myNodeType=$1;
+echo "myNodeType=$myNodeType";
+echo "myNodeType=$myNodeType" > mydata.txt;
