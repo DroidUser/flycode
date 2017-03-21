@@ -63,9 +63,7 @@
           "sshPublicKey": ""
         },
         "constraints": {
-          "required": true,
-          "regex": "^(?=.*[^a-zA-Z])(?=.*[a-z])(?=.*[A-Z])\\S{8,}$",
-          "validationMessage": "The password must be at least 8 characters in length and must contain at least one digit, one non-alphanumeric character, one upper case letter and one lower case letter. Also, the password should not contain 3 consecutive letters from the username"
+          "required": true
         },
         "options": {
           "hideConfirmation": false
