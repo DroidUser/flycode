@@ -3,6 +3,11 @@
   "version": "0.0.1-preview",
   "parameters": {
     "basics": [
+      "clusterFilters": {
+        "types": ["Hadoop", "HBase", "Storm", "Spark"],
+        "tiers": ["Standard", "Premium"],
+        "versions": ["3.4"]
+    },
       {
         "name": "adminUsername",
         "type": "Microsoft.Compute.UserNameTextBox",
