@@ -250,7 +250,7 @@
       "clusterLoginUserName": "[basics('clusterLoginUserName')]",
       "sshUserName": "[basics('sshUserName')]",
       "clusterLoginPassword": "[basics('clusterLoginPassword')]",
-      "sshPassword": "[basics('sshPassword')]",
+      "sshPassword": "[basics('SSHCredntials').password]",
       "authenticationType": "[basics('SSHCredntials').authenticationType]",
       "sshKey": "[basics('SSHCredntials').sshPublicKey]",
       "clusterNodeCount": "[steps('SampleClusterConfig').clusterNodeCount]",
