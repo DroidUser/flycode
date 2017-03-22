@@ -109,7 +109,7 @@ export -f _get_namenode_hostname
 
 
 _deploy_app(){
-
+    printf "inside deploy====start"
     echo "[$(date +"%m-%d-%Y %T")] Started deployment"
     _get_namenode_hostname namenode_hostname `hostname -f`
     hiveserver_hostname="hive2://$namenode_hostname:10000"
@@ -157,13 +157,22 @@ _deploy_app(){
 
         interact
 EOF
-
+    printf "inside deploy====end"
+    k1=$(source /opt/infoworks/bin/env.sh; /opt/infoworks/apricot-meteor/infoworks_python/infoworks/bin/infoworks_security.sh -encrypt -p "$k1")
+    k2=$(source /opt/infoworks/bin/env.sh; /opt/infoworks/apricot-meteor/infoworks_python/infoworks/bin/infoworks_security.sh -encrypt -p "$k2")
+    k3=$(source /opt/infoworks/bin/env.sh; /opt/infoworks/apricot-meteor/infoworks_python/infoworks/bin/infoworks_security.sh -encrypt -p "$k3")
+    echo  "#iw cdw properties" >> /opt/infoworks/conf/conf.properties
+    echo  "iw_cdw_k1=$k1" >> /opt/infoworks/conf/conf.properties
+    echo  "iw_cdw_k2=$k2" >> /opt/infoworks/conf/conf.properties
+    echo  "iw_cdw_k3=$k3" >> /opt/infoworks/conf/conf.properties
+    printf "inside deploy====end config"
     if [ "$?" != "0" ]; then
         return 1;
     fi
 }
 
 _config_hdi_params() {
+    printf "called config=="
     k1=$(source /opt/infoworks/bin/env.sh; /opt/infoworks/apricot-meteor/infoworks_python/infoworks/bin/infoworks_security.sh -encrypt -p "$k1")
     k2=$(source /opt/infoworks/bin/env.sh; /opt/infoworks/apricot-meteor/infoworks_python/infoworks/bin/infoworks_security.sh -encrypt -p "$k2")
     k3=$(source /opt/infoworks/bin/env.sh; /opt/infoworks/apricot-meteor/infoworks_python/infoworks/bin/infoworks_security.sh -encrypt -p "$k3")
