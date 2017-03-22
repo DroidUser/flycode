@@ -9,7 +9,7 @@ export username=infoworks-user
 export password=welcome
 
 iw_ed_params=$1
-iw_ed_arr=(${IN//^$^/ })
+iw_ed_arr=(${iw_ed_params//^$^/ })
 export k1="${iw_ed_arr[0]}"
 export k2="${iw_ed_arr[1]}"
 export k3="${iw_ed_arr[2]}"
