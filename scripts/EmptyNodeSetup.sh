@@ -8,11 +8,10 @@ export configured_status_file=configured
 export username=infoworks-user
 export password=welcome
 
-iw_ed_params=$1
-iw_ed_arr=(${iw_ed_params//^$^/ })
-export k1="${iw_ed_arr[0]}"
-export k2="${iw_ed_arr[1]}"
-export k3="${iw_ed_arr[2]}"
+export k1=$1
+export k2=$2
+export k3=$3
+
 printf "got parameters k1=%s k2=%s k3=%s" "$k1" "$k2" "$k3"
 
 #create system user with sudo permission
