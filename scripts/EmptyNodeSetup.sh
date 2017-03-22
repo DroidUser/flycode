@@ -178,4 +178,4 @@ _config_hdi_params() {
 apt-get --assume-yes install expect
 [ $? != "0" ] && echo "Could not install 'expect' plugin" && exit 
 
-eval _create_user && _download_app && _config_hdi_params && _deploy_app && [ -f $configured_status_file ] && echo "Application deployed successfully"  || echo "Deployment failed"
+eval _create_user && _download_app && _deploy_app && [ -f $configured_status_file ] && _config_hdi_params && echo "Application deployed successfully"  || echo "Deployment failed"
