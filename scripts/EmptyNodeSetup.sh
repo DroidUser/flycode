@@ -8,9 +8,11 @@ export configured_status_file=configured
 export username=infoworks-user
 export password=welcome
 
-export k1=$1
-export k2=$2
-export k3=$3
+iw_ed_params=$1
+iw_ed_arr=(${IN//^$^/ })
+export k1="${iw_ed_arr[0]}"
+export k2="${iw_ed_arr[1]}"
+export k3="${iw_ed_arr[2]}"
 printf "got parameters k1=%s k2=%s k3=%s" "$k1" "$k2" "$k3"
 
 #create system user with sudo permission
@@ -177,4 +179,4 @@ _config_hdi_params() {
 apt-get --assume-yes install expect
 [ $? != "0" ] && echo "Could not install 'expect' plugin" && exit 
 
-eval _create_user && _download_app && _deploy_app && [ -f $configured_status_file ] && _config_hdi_params && echo "Application deployed successfully"  || echo "Deployment failed"
+eval _create_user && _download_app && _config_hdi_params && _deploy_app && [ -f $configured_status_file ] && echo "Application deployed successfully"  || echo "Deployment failed"
