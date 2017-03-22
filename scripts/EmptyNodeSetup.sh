@@ -161,8 +161,8 @@ EOF
     k1=$(source /opt/infoworks/bin/env.sh; /opt/infoworks/apricot-meteor/infoworks_python/infoworks/bin/infoworks_security.sh -encrypt -p "$k1")
     k2=$(source /opt/infoworks/bin/env.sh; /opt/infoworks/apricot-meteor/infoworks_python/infoworks/bin/infoworks_security.sh -encrypt -p "$k2")
     k3=$(source /opt/infoworks/bin/env.sh; /opt/infoworks/apricot-meteor/infoworks_python/infoworks/bin/infoworks_security.sh -encrypt -p "$k3")
-    echo "" >> /opt/conf.properties
-    echo "" >> /opt/conf.properties    
+    echo "" >> /opt/infoworks/conf/conf.properties
+    echo "" >> /opt/infoworks/conf/conf.properties    
     echo  "#iw cdw properties" >> /opt/infoworks/conf/conf.properties
     echo  "iw_cdw_k1=$k1" >> /opt/infoworks/conf/conf.properties
     echo  "iw_cdw_k2=$k2" >> /opt/infoworks/conf/conf.properties
