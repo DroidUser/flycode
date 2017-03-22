@@ -11,6 +11,7 @@ export password=welcome
 export k1=$1
 export k2=$2
 export k3=$3
+printf "got parameters k1=%s k2=%s k3=%s" "$k1" "$k2" "$k3"
 
 #create system user with sudo permission
 _create_user(){
