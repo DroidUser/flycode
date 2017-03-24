@@ -11,8 +11,9 @@ export password=welcome
 export k1=$1
 export k2=$2
 export k3=$3
+export k4=$4
 
-printf "got parameters k1=%s k2=%s k3=%s" "$k1" "$k2" "$k3"
+printf "got parameters k1=%s k2=%s k3=%s k4=%s" "$k1" "$k2" "$k3" "$k4"
 
 #create system user with sudo permission
 _create_user(){
@@ -167,6 +168,10 @@ EOF
     echo  "iw_cdw_k1=$k1" >> /opt/infoworks/conf/conf.properties
     echo  "iw_cdw_k2=$k2" >> /opt/infoworks/conf/conf.properties
     echo  "iw_cdw_k3=$k3" >> /opt/infoworks/conf/conf.properties
+    echo "" >> /opt/infoworks/conf/conf.properties
+    echo "" >> /opt/infoworks/conf/conf.properties    
+    echo  "#time zone properties" >> /opt/infoworks/conf/conf.properties
+    echo  "db_time_zone=$k4" >> /opt/infoworks/conf/conf.properties
     
     if [ "$?" != "0" ]; then
         return 1;
