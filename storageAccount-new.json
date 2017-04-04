@@ -19,7 +19,7 @@
       "metadata": {
         "Description": "The type of the Storage Account created"
       },
-      "defaultValue": "Standard_LRS"
+      "defaultValue": "Premium_LRS"
     },
     "storageAccountExistingRG": {
       "type": "string",
@@ -39,7 +39,7 @@
   ],
   "outputs": {
     "storageAccountId": {
-      "value": "[reference(resourceId('Microsoft.Storage/storageAccounts',parameters('storageAccountName')),'2016-01-01')]",
+      "value": "[resourceId('Microsoft.Storage/StorageAccounts',parameters('storageAccountName'))]",
       "type": "string"
     }
   }
