@@ -39,7 +39,7 @@
   ],
   "outputs": {
     "storageAccountId": {
-      "value": "[resourceId('Microsoft.Storage/storageAccounts',parameters('storageAccountName'))]",
+      "value": "[reference(resourceId('Microsoft.Storage/storageAccounts',parameters('storageAccountName')),'2016-01-01')]",
       "type": "string"
     }
   }
