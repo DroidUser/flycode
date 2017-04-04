@@ -30,7 +30,7 @@
     {
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[parameters('storageAccountName')]",
-      "apiVersion": "2015-05-01-preview",
+      "apiVersion": "2016-02-01",
       "location": "[resourceGroup().location]",
       "properties": {
         "accountType": "[parameters('storageAccountType')]"
@@ -39,7 +39,7 @@
   ],
   "outputs": {
     "storageAccountId": {
-      "value": "[resourceId('Microsoft.Storage/StorageAccounts',parameters('storageAccountName'))]",
+      "value": "[resourceId('Microsoft.Storage/storageAccounts',parameters('storageAccountName'))]",
       "type": "string"
     }
   }
