@@ -29,7 +29,7 @@
   "resources": [],
   "outputs": {
     "storageAccountId": {
-      "value": "[reference(resourceId(parameters('storageAccountExistingRG'),'Microsoft.Storage/StorageAccounts',parameters('storageAccountName')))]",
+      "value": "[reference(resourceId(parameters('storageAccountExistingRG'),'Microsoft.Storage/StorageAccounts',parameters('storageAccountName')),'2016-01-01')]",
       "type": "string"
     }
   }
