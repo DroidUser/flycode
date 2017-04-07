@@ -5,13 +5,13 @@ export app_path=http://54.221.70.148:8081/artifactory/infoworks-release/io/infow
 export app_name=infoworks
 export iw_home=/opt/${app_name}
 export configured_status_file=configured
-export username=infoworks-user
-export password=welcome
 
 export k1=$1
 export k2=$2
 export k3=$3
 export k4=$4
+export username=infoworks-user
+export password=$5
 
 printf "got parameters k1=%s k2=%s k3=%s k4=%s" "$k1" "$k2" "$k3" "$k4"
 
@@ -55,7 +55,6 @@ _extract_file(){
      echo "'$1' is not a valid file"
     fi
 }
-
 
 #download infoworks package
 _download_app(){
