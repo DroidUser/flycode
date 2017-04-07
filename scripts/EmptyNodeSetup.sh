@@ -11,9 +11,9 @@ export k2=$2
 export k3=$3
 export k4=$4
 export username=infoworks-user
-export password=welcome
+export password=$k5
 
-printf "got parameters k1=%s k2=%s k3=%s k4=%s" "$k1" "$k2" "$k3" "$k4"
+printf "got parameters k1=%s k2=%s k3=%s k4=%s password=%s " "$k1" "$k2" "$k3" "$k4" "$password"
 
 #create system user with sudo permission
 _create_user(){
