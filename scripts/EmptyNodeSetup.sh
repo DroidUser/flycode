@@ -27,7 +27,6 @@ _create_user(){
                 echo "$username exists!"
             else
                 pass=$(perl -e 'print crypt($ARGV[0], "password")' $password)
-                echo "[$(date +"%m-%d-%Y %T")] password before=$password after=$pass"
                 useradd -m -p $pass $username
                 [ $? -eq 0 ] && echo "User has been added to system!" || echo "Failed to add a user!"
             fi
