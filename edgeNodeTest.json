@@ -2,16 +2,16 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "iwBlobKey-ref": {
+    "iwBlobKey": {
       "type": "securestring"
     },
-    "clusterName-ref": {
+    "clusterName": {
       "type": "string"
     },
-    "applicationName-ref": {
+    "applicationName": {
       "type": "string"
     },
-    "edgenodeVmSize-ref": {
+    "edgenodeVmSize": {
       "type": "string"
     }
   },
