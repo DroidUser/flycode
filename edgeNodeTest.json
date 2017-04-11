@@ -1,5 +1,24 @@
 {
-      "name": "[concat(parameters('clusterName'),'/', variables('applicationName'))]",
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "iwBlobKey": {
+      "type": "securestring"
+    },
+    "clusterName": {
+      "type": "string"
+    },
+    "applicationName": {
+      "type": "string"
+    },
+    "edgenodeVmSize": {
+      "type": "string"
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "name": "[concat(parameters('clusterName'),'/', parameters('applicationName'))]",
       "type": "Microsoft.HDInsight/clusters/applications",
       "apiVersion": "2015-03-01-preview",
       "dependsOn": [
@@ -20,27 +39,11 @@
         },
         "installScriptActions": [
           {
-            "name": "[concat('emptynode','-' ,uniquestring(variables('applicationName')))]",
+            "name": "[concat('emptynode','-' ,uniquestring(parameters('applicationName')))]",
             "uri": "[concat('https://iwteststorage.blob.core.windows.net/scripts/testStartUp.sh?st=2017-03-28T12%3A03%3A00Z&se=2019-03-29T13%3A03%3A00Z&sp=r&sv=2015-12-11&sr=b&sig='),parameters('iwBlobKey')]",
             "roles": [
               "edgenode"
             ]
-          },
-          {
-            "name": "[concat('emptynode','-' ,uniquestring(variables('applicationName')))]",
-            "uri": "[concat(parameters('_artifactsLocation'), '/', parameters('stagingFolder'), parameters('installScriptActionFolder'), '/', parameters('edgenodeScriptName'))]",
-            "roles": [
-              "edgenode"
-            ],
-            "parameters": "[concat(parameters('clusterName'),' ',parameters('clusterLoginUserName'),' ',parameters('clusterLoginPassword'),' ',parameters('timeZone'),' ',parameters('sshPassword'))]"
-          },
-          {
-            "name": "[concat('spark-install','-' ,uniquestring(variables('applicationName')))]",
-            "uri": "[concat(parameters('_artifactsLocation'), '/', parameters('stagingFolder'), parameters('installScriptActionFolder'), '/', parameters('sparkScriptName'))]",
-            "roles": [
-              "edgenode"
-            ],
-            "parameters": "[concat(parameters('clusterName'),' ',parameters('clusterLoginUserName'),' ',parameters('clusterLoginPassword'))]"
           }
         ],
         "uninstallScriptActions": [],
@@ -82,3 +85,11 @@
         "applicationType": "CustomApplication"
       }
     }
+  ],
+  "outputs": {
+    "application": {
+      "type": "object",
+      "value": "[reference(resourceId('Microsoft.HDInsight/clusters/applications/',parameters('clusterName'), parameters('applicationName')))]"
+    }
+  }
+}
