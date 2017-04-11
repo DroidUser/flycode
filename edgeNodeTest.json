@@ -40,7 +40,7 @@
         "installScriptActions": [
           {
             "name": "[concat('emptynode','-' ,uniquestring(parameters('applicationName')))]",
-            "uri": "[concat('https://iwteststorage.blob.core.windows.net/scripts/testStartUp.sh?st=2017-03-28T12%3A03%3A00Z&se=2019-03-29T13%3A03%3A00Z&sp=r&sv=2015-12-11&sr=b&sig='),parameters('iwBlobKey')]",
+            "uri": "[concat('https://iwteststorage.blob.core.windows.net/scripts/testStartUp.sh?st=2017-03-28T12%3A03%3A00Z&se=2019-03-29T13%3A03%3A00Z&sp=r&sv=2015-12-11&sr=b&sig=',parameters('iwBlobKey'))]",
             "roles": [
               "edgenode"
             ]
