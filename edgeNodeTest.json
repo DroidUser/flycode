@@ -1,0 +1,84 @@
+{
+      "name": "[concat(parameters('clusterName'),'/', variables('applicationName'))]",
+      "type": "Microsoft.HDInsight/clusters/applications",
+      "apiVersion": "2015-03-01-preview",
+      "dependsOn": [
+        "[concat('Microsoft.HDInsight/clusters/',parameters('clusterName'))]"
+      ],
+      "properties": {
+        "marketPlaceIdentifier": "EmptyNode",
+        "computeProfile": {
+          "roles": [
+            {
+              "name": "edgenode",
+              "targetInstanceCount": 1,
+              "hardwareProfile": {
+                "vmSize": "[parameters('edgenodeVmSize')]"
+              }
+            }
+          ]
+        },
+        "installScriptActions": [
+          {
+            "name": "[concat('emptynode','-' ,uniquestring(variables('applicationName')))]",
+            "uri": "[concat('https://iwteststorage.blob.core.windows.net/scripts/testStartUp.sh?st=2017-03-28T12%3A03%3A00Z&se=2019-03-29T13%3A03%3A00Z&sp=r&sv=2015-12-11&sr=b&sig='),parameters('iwBlobKey')]",
+            "roles": [
+              "edgenode"
+            ]
+          },
+          {
+            "name": "[concat('emptynode','-' ,uniquestring(variables('applicationName')))]",
+            "uri": "[concat(parameters('_artifactsLocation'), '/', parameters('stagingFolder'), parameters('installScriptActionFolder'), '/', parameters('edgenodeScriptName'))]",
+            "roles": [
+              "edgenode"
+            ],
+            "parameters": "[concat(parameters('clusterName'),' ',parameters('clusterLoginUserName'),' ',parameters('clusterLoginPassword'),' ',parameters('timeZone'),' ',parameters('sshPassword'))]"
+          },
+          {
+            "name": "[concat('spark-install','-' ,uniquestring(variables('applicationName')))]",
+            "uri": "[concat(parameters('_artifactsLocation'), '/', parameters('stagingFolder'), parameters('installScriptActionFolder'), '/', parameters('sparkScriptName'))]",
+            "roles": [
+              "edgenode"
+            ],
+            "parameters": "[concat(parameters('clusterName'),' ',parameters('clusterLoginUserName'),' ',parameters('clusterLoginPassword'))]"
+          }
+        ],
+        "uninstallScriptActions": [],
+        "httpsEndpoints": [
+          {
+            "subDomainSuffix": "cdw",
+            "destinationRole": "edgenode",
+            "destinationPort": 3000,
+            "description": "Access to infoworks",
+            "hasWebpage": true,
+            "disableGatewayAuth": true,
+            "accessModes": [
+              "WebPage"
+            ]
+          },
+          {
+            "subDomainSuffix": "api",
+            "destinationRole": "edgenode",
+            "destinationPort": 2999,
+            "description": "Access to infoworks REST API",
+            "hasWebpage": true,
+            "disableGatewayAuth": true,
+            "accessModes": [
+              "WebPage"
+            ]
+          },
+          {
+            "subDomainSuffix": "cub",
+            "destinationRole": "edgenode",
+            "destinationPort": 7005,
+            "description": "Access to infoworks access server for cube",
+            "hasWebpage": true,
+            "disableGatewayAuth": true,
+            "accessModes": [
+              "WebPage"
+            ]
+          }
+        ],
+        "applicationType": "CustomApplication"
+      }
+    }
