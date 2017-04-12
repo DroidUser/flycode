@@ -21,9 +21,6 @@
       "name": "[concat(parameters('clusterName'),'/', parameters('applicationName'))]",
       "type": "Microsoft.HDInsight/clusters/applications",
       "apiVersion": "2015-03-01-preview",
-      "dependsOn": [
-        "[concat('Microsoft.HDInsight/clusters/',parameters('clusterName'))]"
-      ],
       "properties": {
         "marketPlaceIdentifier": "EmptyNode",
         "computeProfile": {
