@@ -24,7 +24,7 @@ _download_file()
 _init(){
 
 	#download secret file
-	_download_file $p6.sh /secret.txt
+	_download_file $p6 /secret.txt
 
 	#extract key
 	value=$(<secret.txt)
