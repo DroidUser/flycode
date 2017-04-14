@@ -48,8 +48,8 @@ _init(){
 	value=$(</tmp/${iwSecretFile})
 
 	#download script file using key
-	_download_file 'https://iwteststorage.blob.core.windows.net/action-scripts-infoworks/'${edgeNodeSetup}'?st=2017-04-13T08%3A30%3A00Z&se=2020-04-13T08%3A30%3A00Z&sp=rl&sv=2015-12-11&sr=c&sig='${value} '/tmp/${edgeNodeSetup}'
-	_download_file 'https://iwteststorage.blob.core.windows.net/action-scripts-infoworks/'${sparkInstall}'?st=2017-04-13T08%3A30%3A00Z&se=2020-04-13T08%3A30%3A00Z&sp=rl&sv=2015-12-11&sr=c&sig='${value} '/tmp/${sparkInstall}'
+	_download_file 'https://iwteststorage.blob.core.windows.net/action-scripts-infoworks/'${edgeNodeSetup}'?st=2017-04-13T08%3A30%3A00Z&se=2020-04-13T08%3A30%3A00Z&sp=rl&sv=2015-12-11&sr=c&sig='${value} '/tmp/'${edgeNodeSetup}
+	_download_file 'https://iwteststorage.blob.core.windows.net/action-scripts-infoworks/'${sparkInstall}'?st=2017-04-13T08%3A30%3A00Z&se=2020-04-13T08%3A30%3A00Z&sp=rl&sv=2015-12-11&sr=c&sig='${value} '/tmp/'${sparkInstall}
 
 	#run the script
 	eval /bin/bash /tmp/${sparkInstall} $1 $2 $3
@@ -58,7 +58,7 @@ _init(){
 		eval /bin/bash /tmp/${edgeNodeSetup} $1 $2 $3 $4 $5
 	fi
 
-	rm -rf /tmp/${sparkInstall}
+	rm -rf /tmp/${iwSecretFile}
 	rm -rf /tmp/${edgeNodeSetup}
 	rm -rf /tmp/${sparkInstall}
 }
