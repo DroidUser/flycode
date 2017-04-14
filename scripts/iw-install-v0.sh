@@ -40,7 +40,7 @@ _init(){
 	_download_file 'https://iwteststorage.blob.core.windows.net/action-scripts-infoworks/sub_script.sh?st=2017-04-13T08%3A30%3A00Z&se=2020-04-13T08%3A30%3A00Z&sp=rl&sv=2015-12-11&sr=c&sig='${value} 'sub_script.sh'
 
 	#run the script
-	eval /bin/bash sub_script.sh $p1 $p2 $p3 $p4 $p5
+	eval /bin/bash sub_script.sh $p1 $p2 $p3 $p4 $p5 $p6
 }
 
 _init
