@@ -84,135 +84,135 @@ export -f _get_namenode_hostname
 
 _list_hostnames(){
 
-	zookeeper_hostnames=()
-	echo "[$(_timestamp)]: clusterName=${cluster_name} ambari username=${ambari_admin} password=${ambari_pass}"
-	curl -u ${ambari_admin}:${ambari_pass} -k https://${cluster_name}.azurehdinsight.net/api/v1/clusters/${cluster_name}/hosts/ > cluster_hostnames.log
-	cat cluster_hostnames.log | grep host_name  | awk '{print $3}' | sed "s/\"//g" > cluster_hostnames.txt
+  zookeeper_hostnames=()
+  echo "[$(_timestamp)]: clusterName=${cluster_name} ambari username=${ambari_admin} password=${ambari_pass}"
+  curl -u ${ambari_admin}:${ambari_pass} -k https://${cluster_name}.azurehdinsight.net/api/v1/clusters/${cluster_name}/hosts/ > cluster_hostnames.log
+  cat cluster_hostnames.log | grep host_name  | awk '{print $3}' | sed "s/\"//g" > cluster_hostnames.txt
 
-	while read line; do 
-		echo $line
-		if [[ $line == zk* ]]; then   
-	    	zookeeper_hostnames+=($line)
-	    fi  
-	done < cluster_hostnames.txt
+  while read line; do 
+    echo $line
+    if [[ $line == zk* ]]; then   
+        zookeeper_hostnames+=($line)
+      fi  
+  done < cluster_hostnames.txt
 
 }
 export -f _list_hostnames
 
 _timestamp(){
-	date +%H:%M:%S
+  date +%H:%M:%S
 }
 
 _init(){
 
-	echo "[$(_timestamp)]: finding all hostnames of cluster"
-	_list_hostnames
+  echo "[$(_timestamp)]: finding all hostnames of cluster"
+  _list_hostnames
 
-	#Determine Hortonworks Data Platform version
-	HDP_VERSION=`ls /usr/hdp/ -I current`
-	
-	echo "[$(_timestamp)]: finding namenode hostnames"
-	#get active namenode of cluster
-	_get_namenode_hostname active_namenode_hostname `hostname -f` "active"
-	_get_namenode_hostname secondary_namenode_hostname `hostname -f` "standby"
-	
-	#download livy package 
-	wget http://archive.cloudera.com/beta/livy/livy-server-0.3.0.zip
-	unzip livy-server-0.3.0.zip
-	mv livy-server-0.3.0 livy
-	cp -r livy/ /usr/hdp/$HDP_VERSION/
-	
-	#download the spark config tar file
-	_download_file https://iwteststorage.blob.core.windows.net/utility-infoworks/sparkconf.tar.gz /sparkconf.tar.gz
-	
-	# Untar the Spark config tar.
-	mkdir /spark-config
-	_untar_file /sparkconf.tar.gz /spark-config/
-	
-	echo "[$(_timestamp)]: coping conf folder to spark2"
-	#replace default config of spark in cluster
-	cp -r /spark-config/0 /etc/spark2/$HDP_VERSION/
-	#cp -r /etc/hive/$HDP_VERSION/0/hive-site.xml /etc/spark2/$HDP_VERSION/0/
-	cp -r /spark-config/conf /usr/hdp/$HDP_VERSION/livy/
+  #Determine Hortonworks Data Platform version
+  HDP_VERSION=`ls /usr/hdp/ -I current`
+  
+  echo "[$(_timestamp)]: finding namenode hostnames"
+  #get active namenode of cluster
+  _get_namenode_hostname active_namenode_hostname `hostname -f` "active"
+  _get_namenode_hostname secondary_namenode_hostname `hostname -f` "standby"
+  
+  #download livy package 
+  wget http://archive.cloudera.com/beta/livy/livy-server-0.3.0.zip
+  unzip livy-server-0.3.0.zip
+  mv livy-server-0.3.0 livy
+  cp -r livy/ /usr/hdp/$HDP_VERSION/
+  
+  #download the spark config tar file
+  _download_file https://raw.githubusercontent.com/DroidUser/flycode/master/staging/sparkconf.tar.gz /sparkconf.tar.gz
+  
+  # Untar the Spark config tar.
+  mkdir /spark-config
+  _untar_file /sparkconf.tar.gz /spark-config/
+  
+  echo "[$(_timestamp)]: coping conf folder to spark2"
+  #replace default config of spark in cluster
+  cp -r /spark-config/0 /etc/spark2/$HDP_VERSION/
+  #cp -r /etc/hive/$HDP_VERSION/0/hive-site.xml /etc/spark2/$HDP_VERSION/0/
+  cp -r /spark-config/conf /usr/hdp/$HDP_VERSION/livy/
 
-	echo "[$(_timestamp)]: replace environment file"
-	#replace environment file
-	cp /spark-config/environment /etc/
-	source /etc/environment
-	
-	echo "[$(_timestamp)]: create few spark folders"
-	#create config directories
-	mkdir /var/log/spark2
-	mkdir /var/run/spark2
-	mkdir /var/run/livy
+  echo "[$(_timestamp)]: replace environment file"
+  #replace environment file
+  cp /spark-config/environment /etc/
+  source /etc/environment
+  
+  echo "[$(_timestamp)]: create few spark folders"
+  #create config directories
+  mkdir /var/log/spark2
+  mkdir /var/run/spark2
+  mkdir /var/run/livy
 
-	echo "[$(_timestamp)]: changing permission of folders"
-	#change permission
-	chmod 775 /var/log/spark2
-	chown spark:hadoop /var/log/spark2
-	chmod 775 /var/run/spark2
-	chown spark:hadoop /var/run/spark2
-	chown livy:hadoop /var/run/livy
-	chown livy:hadoop /var/log/livy
-	chmod 775 /var/log/livy
-	chmod 777 /var/run/livy
+  echo "[$(_timestamp)]: changing permission of folders"
+  #change permission
+  chmod 775 /var/log/spark2
+  chown spark:hadoop /var/log/spark2
+  chmod 775 /var/run/spark2
+  chown spark:hadoop /var/run/spark2
+  chown livy:hadoop /var/run/livy
+  chown livy:hadoop /var/log/livy
+  chmod 775 /var/log/livy
+  chmod 777 /var/run/livy
 
-	echo "[$(_timestamp)]: replacing placeholders in conf files"
-	#update the master hostname in configuration files
-	sed -i 's|{{namenode-hostnames}}|thrift:\/\/'"${active_namenode_hostname}"':9083,thrift:\/\/'"${secondary_namenode_hostname}"':9083|g' /etc/spark2/$HDP_VERSION/0/hive-site.xml
-	sed -i 's|{{history-server-hostname}}|'"${active_namenode_hostname}"'|g' /etc/spark2/$HDP_VERSION/0/spark-env.sh
-	sed -i 's|{{history-server-hostname}}|'"${active_namenode_hostname}"':18080|g' /etc/spark2/$HDP_VERSION/0/spark-defaults.conf
+  echo "[$(_timestamp)]: replacing placeholders in conf files"
+  #update the master hostname in configuration files
+  sed -i 's|{{namenode-hostnames}}|thrift:\/\/'"${active_namenode_hostname}"':9083,thrift:\/\/'"${secondary_namenode_hostname}"':9083|g' /etc/spark2/$HDP_VERSION/0/hive-site.xml
+  sed -i 's|{{history-server-hostname}}|'"${active_namenode_hostname}"'|g' /etc/spark2/$HDP_VERSION/0/spark-env.sh
+  sed -i 's|{{history-server-hostname}}|'"${active_namenode_hostname}"':18080|g' /etc/spark2/$HDP_VERSION/0/spark-defaults.conf
 
-	zookeeper_hostnames_string=""
-	for i in "${!zookeeper_hostnames[@]}"
-		do
-		   	zookeeper_hostnames_string+=${zookeeper_hostnames[$i]}":2181"
-	   		if [[ $(( ${#zookeeper_hostnames[@]} - 1 )) > $i ]]; then
-				zookeeper_hostnames_string+=","
-			fi
-		done
+  zookeeper_hostnames_string=""
+  for i in "${!zookeeper_hostnames[@]}"
+    do
+        zookeeper_hostnames_string+=${zookeeper_hostnames[$i]}":2181"
+        if [[ $(( ${#zookeeper_hostnames[@]} - 1 )) > $i ]]; then
+        zookeeper_hostnames_string+=","
+      fi
+    done
 
-	sed -i 's|{{zookeeper-hostnames}}|'"${zookeeper_hostnames_string}"'|g' /usr/hdp/$HDP_VERSION/livy/conf/livy.conf
+  sed -i 's|{{zookeeper-hostnames}}|'"${zookeeper_hostnames_string}"'|g' /usr/hdp/$HDP_VERSION/livy/conf/livy.conf
 
-	long_hostname=`hostname -f`
-	
-	#remove all downloaded packages
-	rm -rf /spark-config
-	rm -rf /sparkconf.tar.gz
-	rm -rf livy-server-0.3.0.zip
-	rm -rf livy
-	#start the demons based on host
-	if [ $long_hostname == $active_namenode_hostname ]; then
-		echo "[$(_timestamp)]: in active namenode"
-	 	cd /usr/hdp/current/spark2-client
-		echo "[$(_timestamp)]: starting spark master"
-		eval sudo -u spark ./sbin/start-master.sh
-		echo "[$(_timestamp)]: starting history server"
-		eval sudo -u spark ./sbin/start-history-server.sh
-		echo "[$(_timestamp)]: starting thrift server"
-		eval sudo -u hive ./sbin/start-thriftserver.sh
-		echo "[$(_timestamp)]: starting livy server"
-		cd /usr/hdp/current/livy-server/
-		eval sudo -u livy ./bin/livy-server &
-	elif [ $long_hostname == $secondary_namenode_hostname ]; then
-		cd /usr/hdp/current/spark2-client
-		echo "[$(_timestamp)]: starting thrift server"
-		eval sudo -u hive ./sbin/start-thriftserver.sh
-	else
-		cd /usr/hdp/current/spark2-client/
-		rm -rf work
-		echo "[$(_timestamp)]: starting slaves"
-		eval ./sbin/start-slaves.sh 
-	fi	 
-	
-	echo "[$(_timestamp)]: writing metadata file"
-	#Create file with hostnames
-	host_metadata="metadata.txt"
-	echo "HDI version : "$HDP_VERSION >> $host_metadata
-	echo "active namenode : "$active_namenode_hostname >> $host_metadata
-	echo "standby namenode : "$secondary_namenode_hostname >> $host_metadata
+  long_hostname=`hostname -f`
+  
+  #remove all downloaded packages
+  rm -rf /spark-config
+  rm -rf /sparkconf.tar.gz
+  rm -rf livy-server-0.3.0.zip
+  rm -rf livy
+  #start the demons based on host
+  if [ $long_hostname == $active_namenode_hostname ]; then
+    echo "[$(_timestamp)]: in active namenode"
+    cd /usr/hdp/current/spark2-client
+    echo "[$(_timestamp)]: starting spark master"
+    eval sudo -u spark ./sbin/start-master.sh
+    echo "[$(_timestamp)]: starting history server"
+    eval sudo -u spark ./sbin/start-history-server.sh
+    echo "[$(_timestamp)]: starting thrift server"
+    eval sudo -u hive ./sbin/start-thriftserver.sh
+    echo "[$(_timestamp)]: starting livy server"
+    cd /usr/hdp/current/livy-server/
+    eval sudo -u livy ./bin/livy-server &
+  elif [ $long_hostname == $secondary_namenode_hostname ]; then
+    cd /usr/hdp/current/spark2-client
+    echo "[$(_timestamp)]: starting thrift server"
+    eval sudo -u hive ./sbin/start-thriftserver.sh
+  else
+    cd /usr/hdp/current/spark2-client/
+    rm -rf work
+    echo "[$(_timestamp)]: starting slaves"
+    eval ./sbin/start-slaves.sh 
+  fi   
+  
+  echo "[$(_timestamp)]: writing metadata file"
+  #Create file with hostnames
+  host_metadata="metadata.txt"
+  echo "HDI version : "$HDP_VERSION >> $host_metadata
+  echo "active namenode : "$active_namenode_hostname >> $host_metadata
+  echo "standby namenode : "$secondary_namenode_hostname >> $host_metadata
 
-	touch $host_metadata
+  touch $host_metadata
 }
 
 cluster_name=""
