@@ -63,4 +63,4 @@ _init(){
 	rm -rf /tmp/${sparkInstall}
 }
 
-_init
+_init $p1 $p2 $p3 $p4 $p5
