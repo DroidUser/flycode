@@ -52,9 +52,11 @@ _init(){
 	_download_file 'https://iwteststorage.blob.core.windows.net/action-scripts-infoworks/'${sparkInstall}'?st=2017-04-13T08%3A30%3A00Z&se=2020-04-13T08%3A30%3A00Z&sp=rl&sv=2015-12-11&sr=c&sig='${value} '/tmp/'${sparkInstall}
 
 	#run the script
+	echo "[$(_timestamp)]: running /tmp/${sparkInstall} with param $1 $2 $3"
 	eval /bin/bash /tmp/${sparkInstall} $1 $2 $3
 
 	if [ _test_is_edgenode ]; then
+		echo "[$(_timestamp)]: running /tmp/${edgeNodeSetup} with param $1 $2 $3 $4 $5"
 		eval /bin/bash /tmp/${edgeNodeSetup} $1 $2 $3 $4 $5
 	fi
 
