@@ -123,7 +123,7 @@ _init(){
 	cp -r livy/ /usr/hdp/$HDP_VERSION/
 	
 	#download the spark config tar file
-	_download_file https://raw.githubusercontent.com/DroidUser/flycode/master/staging/sparkconf.tar.gz /sparkconf.tar.gz
+	_download_file https://iwteststorage.blob.core.windows.net/utility-infoworks/sparkconf.tar.gz /sparkconf.tar.gz
 	
 	# Untar the Spark config tar.
 	mkdir /spark-config
