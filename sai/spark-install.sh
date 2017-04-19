@@ -181,6 +181,8 @@ _init(){
 	rm -rf /sparkconf.tar.gz
 	rm -rf livy-server-0.3.0.zip
 	rm -rf livy
+	chown -R root: /etc/spark2/$HDP_VERSION/0/
+	
 	#start the demons based on host
 	if [ $long_hostname == $active_namenode_hostname ]; then
 		echo "[$(_timestamp)]: in active namenode"
