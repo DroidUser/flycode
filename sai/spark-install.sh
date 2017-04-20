@@ -193,7 +193,7 @@ _init(){
 		echo "[$(_timestamp)]: in active namenode"
 	 	cd /usr/hdp/current/spark2-client
 		echo "[$(_timestamp)]: starting spark master"
-		#eval sudo -u spark ./sbin/start-master.sh
+		eval sudo -u spark ./sbin/start-master.sh
 		echo "[$(_timestamp)]: starting history server"
 		eval sudo -u spark ./sbin/start-history-server.sh
 		echo "[$(_timestamp)]: starting thrift server"
