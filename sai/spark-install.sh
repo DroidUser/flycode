@@ -163,7 +163,7 @@ _init(){
 	echo "[$(_timestamp)]: replacing placeholders in conf files"
 	#update the master hostname in configuration files
 	sed -i 's|{{namenode-hostnames}}|thrift:\/\/'"${active_namenode_hostname}"':9083,thrift:\/\/'"${secondary_namenode_hostname}"':9083|g' /etc/spark2/$HDP_VERSION/0/hive-site.xml
-	#sed -i 's|{{history-server-hostname}}|'"${active_namenode_hostname}"'|g' /etc/spark2/$HDP_VERSION/0/spark-env.sh
+	sed -i 's|{{history-server-hostname}}|'"${active_namenode_hostname}"'|g' /etc/spark2/$HDP_VERSION/0/spark-env.sh
 	sed -i 's|{{history-server-hostname}}|'"${active_namenode_hostname}"':18080|g' /etc/spark2/$HDP_VERSION/0/spark-defaults.conf
 
 	zookeeper_hostnames_string=""
@@ -193,18 +193,18 @@ _init(){
 		echo "[$(_timestamp)]: in active namenode"
 	 	cd /usr/hdp/current/spark2-client
 		echo "[$(_timestamp)]: starting spark master"
-		#eval sudo -u spark ./sbin/start-master.sh
+		eval sudo -u spark ./sbin/start-master.sh
 		echo "[$(_timestamp)]: starting history server"
 		eval sudo -u spark ./sbin/start-history-server.sh
 		echo "[$(_timestamp)]: starting thrift server"
-		eval sudo -u hive ./sbin/start-thriftserver.sh --master yarn --conf spark.ui.port=5040
+		eval sudo -u hive ./sbin/start-thriftserver.sh
 		echo "[$(_timestamp)]: starting livy server"
-		#cd /usr/hdp/current/livy-server/
-		#eval sudo -u livy ./bin/livy-server &
+		cd /usr/hdp/current/livy-server/
+		eval sudo -u livy ./bin/livy-server &
 	elif [ $long_hostname == $secondary_namenode_hostname ]; then
 		cd /usr/hdp/current/spark2-client
 		echo "[$(_timestamp)]: starting thrift server"
-		eval sudo -u hive ./sbin/start-thriftserver.sh --master yarn --conf spark.ui.port=5040
+		eval sudo -u hive ./sbin/start-thriftserver.sh
 	else
 		cd /usr/hdp/current/spark2-client/
 		rm -rf work
