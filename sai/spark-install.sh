@@ -192,16 +192,18 @@ _init(){
 	#start the demons based on host
 	if [ $long_hostname == $active_namenode_hostname ]; then
 		echo "[$(_timestamp)]: in active namenode"
-	 	cd /usr/hdp/current/spark2-client
-		echo "[$(_timestamp)]: starting spark master"
-		#eval sudo -u spark ./sbin/start-master.sh
-		echo "[$(_timestamp)]: starting thrift server"
-		eval sudo -u hive ./sbin/start-thriftserver.sh --conf spark.ui.port=5040
-		echo "[$(_timestamp)]: starting history server"
-		eval sudo -u spark ./sbin/start-history-server.sh
 		echo "[$(_timestamp)]: starting livy server"
 		cd /usr/hdp/current/livy-server/
 		eval sudo -u livy ./bin/livy-server &
+	 	cd /usr/hdp/current/spark2-client
+		echo "[$(_timestamp)]: starting spark master"
+		#eval sudo -u spark ./sbin/start-master.sh
+		echo "[$(_timestamp)]: starting history server"
+		eval sudo -u spark ./sbin/start-history-server.sh
+		echo "[$(_timestamp)]: starting thrift server"
+		eval sudo -u hive ./sbin/start-thriftserver.sh --conf spark.ui.port=5040
+		
+		
 	elif [ $long_hostname == $secondary_namenode_hostname ]; then
 		cd /usr/hdp/current/spark2-client
 		echo "[$(_timestamp)]: starting thrift server"
