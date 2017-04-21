@@ -117,10 +117,10 @@ _init(){
 	_get_namenode_hostname secondary_namenode_hostname `hostname -f` "standby"
 	
 	#download livy package 
-	#wget http://archive.cloudera.com/beta/livy/livy-server-0.3.0.zip
-	#unzip livy-server-0.3.0.zip
-	#mv livy-server-0.3.0 livy
-	#cp -r livy/ /usr/hdp/$HDP_VERSION/
+	wget http://archive.cloudera.com/beta/livy/livy-server-0.3.0.zip
+	unzip livy-server-0.3.0.zip
+	mv livy-server-0.3.0 livy
+	cp -r livy/ /usr/hdp/$HDP_VERSION/
 	
 	#download the spark config tar file
 	_download_file https://raw.githubusercontent.com/DroidUser/flycode/master/sai/sparkconf19.tar.gz /sparkconf19.tar.gz
@@ -134,9 +134,10 @@ _init(){
 	rm -rf /etc/spark2/$HDP_VERSION/0
 	cp -r /spark-config/0 /etc/spark2/$HDP_VERSION/
 	#cp -r /etc/hive/$HDP_VERSION/0/hive-site.xml /etc/spark2/$HDP_VERSION/0/
-	#cp -r /spark-config/conf /usr/hdp/$HDP_VERSION/livy/
-	cp -r /spark-config/common/LIVY /var/lib/ambari-server/resources/common-services/
-	cp -r /spark-config/stacks/LIVY /var/lib/ambari-server/resources/stacks/HDP/2.5/services/
+	rm -rf /usr/hdp/$HDP_VERSION/livy/conf
+	cp -r /spark-config/conf /usr/hdp/$HDP_VERSION/livy/
+	#cp -r /spark-config/common/LIVY /var/lib/ambari-server/resources/common-services/
+	#cp -r /spark-config/stacks/LIVY /var/lib/ambari-server/resources/stacks/HDP/2.5/services/
 
 	echo "[$(_timestamp)]: replace environment file"
 	#replace environment file
@@ -147,7 +148,7 @@ _init(){
 	#create config directories
 	mkdir /var/log/spark2
 	mkdir /var/run/spark2
-	#mkdir /var/run/livy
+	mkdir /var/run/livy
 
 	echo "[$(_timestamp)]: changing permission of folders"
 	#change permission
@@ -155,10 +156,10 @@ _init(){
 	chown spark:hadoop /var/log/spark2
 	chmod 775 /var/run/spark2
 	chown spark:hadoop /var/run/spark2
-	#chown livy:hadoop /var/run/livy
-	#chown livy:hadoop /var/log/livy
-	#chmod 775 /var/log/livy
-	#chmod 777 /var/run/livy
+	chown livy:hadoop /var/run/livy
+	chown livy:hadoop /var/log/livy
+	chmod 775 /var/log/livy
+	chmod 777 /var/run/livy
 
 	echo "[$(_timestamp)]: replacing placeholders in conf files"
 	#update the master hostname in configuration files
@@ -166,24 +167,24 @@ _init(){
 	#sed -i 's|{{history-server-hostname}}|'"${active_namenode_hostname}"'|g' /etc/spark2/$HDP_VERSION/0/spark-env.sh
 	sed -i 's|{{history-server-hostname}}|'"${active_namenode_hostname}"':18080|g' /etc/spark2/$HDP_VERSION/0/spark-defaults.conf
 
-	#zookeeper_hostnames_string=""
-	#for i in "${!zookeeper_hostnames[@]}"
-	#	do
-	#	   	zookeeper_hostnames_string+=${zookeeper_hostnames[$i]}":2181"
-	#  		if [[ $(( ${#zookeeper_hostnames[@]} - 1 )) > $i ]]; then
-	#			zookeeper_hostnames_string+=","
-	#		fi
-	#	done
+	zookeeper_hostnames_string=""
+	for i in "${!zookeeper_hostnames[@]}"
+		do
+		   	zookeeper_hostnames_string+=${zookeeper_hostnames[$i]}":2181"
+	  		if [[ $(( ${#zookeeper_hostnames[@]} - 1 )) > $i ]]; then
+				zookeeper_hostnames_string+=","
+			fi
+		done
 
-	#sed -i 's|{{zookeeper-hostnames}}|'"${zookeeper_hostnames_string}"'|g' /usr/hdp/$HDP_VERSION/livy/conf/livy.conf
+	sed -i 's|{{zookeeper-hostnames}}|'"${zookeeper_hostnames_string}"'|g' /usr/hdp/$HDP_VERSION/livy/conf/livy.conf
 
 	long_hostname=`hostname -f`
 	
 	#remove all downloaded packages
 	rm -rf /spark-config
 	rm -rf /sparkconf.tar.gz
-	#rm -rf livy-server-0.3.0.zip
-	#rm -rf livy
+	rm -rf livy-server-0.3.0.zip
+	rm -rf livy
 	chown -R root: /etc/spark2/$HDP_VERSION/0/
 	chown -R spark: /etc/spark2/$HDP_VERSION/0/*
 	chown -R hive: /etc/spark2/$HDP_VERSION/0/spark-thrift-sparkconf.conf
@@ -199,8 +200,8 @@ _init(){
 		echo "[$(_timestamp)]: starting history server"
 		eval sudo -u spark ./sbin/start-history-server.sh
 		echo "[$(_timestamp)]: starting livy server"
-		#cd /usr/hdp/current/livy-server/
-		#eval sudo -u livy ./bin/livy-server &
+		cd /usr/hdp/current/livy-server/
+		eval sudo -u livy ./bin/livy-server &
 	elif [ $long_hostname == $secondary_namenode_hostname ]; then
 		cd /usr/hdp/current/spark2-client
 		echo "[$(_timestamp)]: starting thrift server"
