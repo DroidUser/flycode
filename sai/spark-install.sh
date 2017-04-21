@@ -135,8 +135,8 @@ _init(){
 	cp -r /spark-config/0 /etc/spark2/$HDP_VERSION/
 	#cp -r /etc/hive/$HDP_VERSION/0/hive-site.xml /etc/spark2/$HDP_VERSION/0/
 	#cp -r /spark-config/conf /usr/hdp/$HDP_VERSION/livy/
-	#cp -r /spark-config/common/LIVY /var/lib/ambari-server/resources/common-services/
-	#cp -r /spark-config/stacks/LIVY /var/lib/ambari-server/resources/stacks/HDP/2.5/services/
+	cp -r /spark-config/common/LIVY /var/lib/ambari-server/resources/common-services/
+	cp -r /spark-config/stacks/LIVY /var/lib/ambari-server/resources/stacks/HDP/2.5/services/
 
 	echo "[$(_timestamp)]: replace environment file"
 	#replace environment file
