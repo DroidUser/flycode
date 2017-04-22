@@ -117,7 +117,7 @@ _init(){
 	_get_namenode_hostname secondary_namenode_hostname `hostname -f` "standby"
 	
 	#download livy package 
-	apt-get install livy2-2-6-0-2-76 -y
+	apt-get install livy2-2-6-0-2-76 --allow-unauthenticated
 	#wget http://archive.cloudera.com/beta/livy/livy-server-0.3.0.zip
 	#unzip livy-server-0.3.0.zip
 	#mv livy-server-0.3.0 livy
