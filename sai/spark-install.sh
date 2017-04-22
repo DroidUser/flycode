@@ -182,7 +182,7 @@ _init(){
 			fi
 		done
 
-	sed -i 's|{{zookeeper-hostnames}}|'"${zookeeper_hostnames_string}"'|g' /usr/hdp/$HDP_VERSION/livy/conf/livy.conf
+	sed -i 's|{{zookeeper-hostnames}}|'"${zookeeper_hostnames_string}"'|g' /etc/livy2/conf/livy.conf
 
 	long_hostname=`hostname -f`
 	
