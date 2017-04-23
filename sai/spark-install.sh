@@ -117,7 +117,7 @@ _init(){
 	_get_namenode_hostname secondary_namenode_hostname `hostname -f` "standby"
 	
 	#download livy package 
-	apt-get install livy2-$HDP_VERSION --allow-unauthenticated
+	
 	#wget http://archive.cloudera.com/beta/livy/livy-server-0.3.0.zip
 	#unzip livy-server-0.3.0.zip
 	#mv livy-server-0.3.0 livy
@@ -125,11 +125,11 @@ _init(){
 	
 	#download the spark config tar file
 	_download_file https://raw.githubusercontent.com/DroidUser/flycode/master/sai/sparkconf22.tar.gz /sparkconf22.tar.gz
-	_download_file https://raw.githubusercontent.com/DroidUser/flycode/master/sai/webapps.tar.gz /webapps.tar.gz
+	
 	# Untar the Spark config tar.
 	mkdir /spark-config
 	_untar_file /sparkconf22.tar.gz /spark-config/
-	_untar_file /webapps.tar.gz /usr/hdp/$HDP_VERSION/zeppelin/
+	
 	
 	echo "[$(_timestamp)]: coping conf folder to spark2"
 	#replace default config of spark in cluster
@@ -194,18 +194,11 @@ _init(){
 	chown -R root: /etc/spark2/$HDP_VERSION/0/
 	chown -R spark: /etc/spark2/$HDP_VERSION/0/*
 	chown -R hive: /etc/spark2/$HDP_VERSION/0/spark-thrift-sparkconf.conf
-	sudo chown livy: /etc/livy2/conf/*
-	sudo chown -R zeppelin:zeppelin /usr/hdp/$HDP_VERSION/zeppelin/webapps
-	sudo chown -R zeppelin:zeppelin /etc/zeppelin
 	
 	#start the demons based on host
 	if [ $long_hostname == $active_namenode_hostname ]; then
 		echo "[$(_timestamp)]: in active namenode"
 		echo "[$(_timestamp)]: starting livy server"
-		#cd /usr/hdp/current/livy-server/
-		eval sudo -u livy /usr/hdp/$HDP_VERSION/livy2/bin/livy-server start &
-		#Start Zeppelin
-		sudo -u zeppelin /usr/hdp/current/zeppelin-server/bin/zeppelin-daemon.sh start &
 		cd /usr/hdp/current/spark2-client
 		echo "[$(_timestamp)]: starting spark master"
 		#eval sudo -u spark ./sbin/start-master.sh
@@ -220,10 +213,10 @@ _init(){
 		echo "[$(_timestamp)]: starting thrift server"
 		eval sudo -u hive ./sbin/start-thriftserver.sh --properties-file conf/spark-thrift-sparkconf.conf
 	else
-		#cd /usr/hdp/current/spark2-client/
+		cd /usr/hdp/current/spark2-client/
 		#rm -rf work
 		echo "[$(_timestamp)]: starting slaves"
-		#eval sudo -u spark ./sbin/start-slaves.sh
+		eval sudo -u spark ./sbin/start-slaves.sh
 	fi	 
 	
 	echo "[$(_timestamp)]: writing metadata file"
