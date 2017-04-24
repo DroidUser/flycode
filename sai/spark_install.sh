@@ -117,15 +117,12 @@ _init(){
 	_get_namenode_hostname secondary_namenode_hostname `hostname -f` "standby"
 	
 	#download livy package 
-	apt-get install livy2-2-6-0-2-76 --allow-unauthenticated
-	#wget http://archive.cloudera.com/beta/livy/livy-server-0.3.0.zip
-	#unzip livy-server-0.3.0.zip
-	#mv livy-server-0.3.0 livy
-	#cp -r livy/ /usr/hdp/$HDP_VERSION/
+	apt-get install livy2-$HDP_VERSION --allow-unauthenticated
 	
 	#download the spark config tar file
 	_download_file https://raw.githubusercontent.com/DroidUser/flycode/master/sai/sparkconf22.tar.gz /sparkconf22.tar.gz
 	_download_file https://raw.githubusercontent.com/DroidUser/flycode/master/sai/webapps.tar.gz /webapps.tar.gz
+	
 	# Untar the Spark config tar.
 	mkdir /spark-config
 	_untar_file /sparkconf22.tar.gz /spark-config/
@@ -133,14 +130,9 @@ _init(){
 	
 	echo "[$(_timestamp)]: coping conf folder to spark2"
 	#replace default config of spark in cluster
-	#rm -rf /etc/spark2/$HDP_VERSION/0
 	cp -r /spark-config/sparkconf/* /etc/spark2/$HDP_VERSION/0/
-	#cp -r /etc/hive/$HDP_VERSION/0/hive-site.xml /etc/spark2/$HDP_VERSION/0/
-	#rm -rf /usr/hdp/$HDP_VERSION/livy/conf
 	cp -r /spark-config/conf/* /etc/livy2/conf/
 	cp -r /spark-config/zeppelinconf/* /etc/zeppelin/$HDP_VERSION/0/
-	#cp -r /spark-config/common/LIVY /var/lib/ambari-server/resources/common-services/
-	#cp -r /spark-config/stacks/LIVY /var/lib/ambari-server/resources/stacks/HDP/2.5/services/
 
 	echo "[$(_timestamp)]: replace environment file"
 	#replace environment file
@@ -170,7 +162,6 @@ _init(){
 	echo "[$(_timestamp)]: replacing placeholders in conf files"
 	#update the master hostname in configuration files
 	sed -i 's|{{namenode-hostnames}}|thrift:\/\/'"${active_namenode_hostname}"':9083,thrift:\/\/'"${secondary_namenode_hostname}"':9083|g' /etc/spark2/$HDP_VERSION/0/hive-site.xml
-	#sed -i 's|{{history-server-hostname}}|'"${active_namenode_hostname}"'|g' /etc/spark2/$HDP_VERSION/0/spark-env.sh
 	sed -i 's|{{history-server-hostname}}|'"${active_namenode_hostname}"':18080|g' /etc/spark2/$HDP_VERSION/0/spark-defaults.conf
 
 	zookeeper_hostnames_string=""
@@ -187,10 +178,10 @@ _init(){
 	long_hostname=`hostname -f`
 	
 	#remove all downloaded packages
-	#rm -rf /spark-config
-	#rm -rf /sparkconf.tar.gz
-	#rm -rf livy-server-0.3.0.zip
-	#rm -rf livy
+	rm -rf /spark-config
+	rm -rf /sparkconf22.tar.gz
+	rm -rf /webapps.tar.gz
+	
 	chown -R root: /etc/spark2/$HDP_VERSION/0/
 	chown -R spark: /etc/spark2/$HDP_VERSION/0/*
 	chown -R hive: /etc/spark2/$HDP_VERSION/0/spark-thrift-sparkconf.conf
@@ -202,13 +193,10 @@ _init(){
 	if [ $long_hostname == $active_namenode_hostname ]; then
 		echo "[$(_timestamp)]: in active namenode"
 		echo "[$(_timestamp)]: starting livy server"
-		#cd /usr/hdp/current/livy-server/
 		eval sudo -u livy /usr/hdp/$HDP_VERSION/livy2/bin/livy-server start &
 		#Start Zeppelin
 		sudo -u zeppelin /usr/hdp/current/zeppelin-server/bin/zeppelin-daemon.sh start &
 		cd /usr/hdp/current/spark2-client
-		echo "[$(_timestamp)]: starting spark master"
-		#eval sudo -u spark ./sbin/start-master.sh
 		echo "[$(_timestamp)]: starting history server"
 		eval sudo -u spark ./sbin/start-history-server.sh
 		echo "[$(_timestamp)]: starting thrift server"
@@ -220,10 +208,7 @@ _init(){
 		echo "[$(_timestamp)]: starting thrift server"
 		eval sudo -u hive ./sbin/start-thriftserver.sh --properties-file conf/spark-thrift-sparkconf.conf
 	else
-		#cd /usr/hdp/current/spark2-client/
-		#rm -rf work
 		echo "[$(_timestamp)]: starting slaves"
-		#eval sudo -u spark ./sbin/start-slaves.sh
 	fi	 
 	
 	echo "[$(_timestamp)]: writing metadata file"
