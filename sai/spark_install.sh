@@ -143,8 +143,8 @@ _init(){
 	#create config directories
 	mkdir /var/log/spark2
 	mkdir /var/run/spark2
-	mkdir /var/log/livy
-	mkdir /var/run/livy
+	mkdir /var/log/livy2
+	mkdir /var/run/livy2
 	mkdir /var/run/zeppelin
 	
 	echo "[$(_timestamp)]: changing permission of folders"
@@ -153,10 +153,10 @@ _init(){
 	chown spark:hadoop /var/log/spark2
 	chmod 775 /var/run/spark2
 	chown spark:hadoop /var/run/spark2
-	chown livy:hadoop /var/run/livy
-	chown livy:hadoop /var/log/livy
-	chmod 775 /var/log/livy
-	chmod 777 /var/run/livy
+	chown livy:hadoop /var/run/livy2
+	chown livy:hadoop /var/log/livy2
+	chmod 775 /var/log/livy2
+	chmod 777 /var/run/livy2
 	chown zeppelin:hadoop /var/run/zeppelin
 	
 	echo "[$(_timestamp)]: replacing placeholders in conf files"
