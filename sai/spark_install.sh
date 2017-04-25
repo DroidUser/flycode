@@ -117,7 +117,7 @@ _init(){
 	_get_namenode_hostname secondary_namenode_hostname `hostname -f` "standby"
 	
 	#download livy package 
-	apt-get install livy2-$HDP_VERSION --allow-unauthenticated
+	apt-get install livy-$HDP_VERSION --allow-unauthenticated
 	
 	#download the spark config tar file
 	_download_file https://raw.githubusercontent.com/DroidUser/flycode/master/sai/sparkconf22.tar.gz /sparkconf22.tar.gz
@@ -131,7 +131,7 @@ _init(){
 	echo "[$(_timestamp)]: coping conf folder to spark2"
 	#replace default config of spark in cluster
 	cp -r /spark-config/sparkconf/* /etc/spark2/$HDP_VERSION/0/
-	cp -r /spark-config/conf/* /etc/livy2/conf/
+	cp -r /spark-config/conf/* /etc/livy/conf/
 	cp -r /spark-config/zeppelinconf/* /etc/zeppelin/$HDP_VERSION/0/
 
 	echo "[$(_timestamp)]: replace environment file"
@@ -143,8 +143,8 @@ _init(){
 	#create config directories
 	mkdir /var/log/spark2
 	mkdir /var/run/spark2
-	mkdir /var/log/livy2
-	mkdir /var/run/livy2
+	mkdir /var/log/livy
+	mkdir /var/run/livy
 	mkdir /var/run/zeppelin
 	
 	echo "[$(_timestamp)]: changing permission of folders"
@@ -153,10 +153,10 @@ _init(){
 	chown spark:hadoop /var/log/spark2
 	chmod 775 /var/run/spark2
 	chown spark:hadoop /var/run/spark2
-	chown livy:hadoop /var/run/livy2
-	chown livy:hadoop /var/log/livy2
-	chmod 775 /var/log/livy2
-	chmod 777 /var/run/livy2
+	chown livy:hadoop /var/run/livy
+	chown livy:hadoop /var/log/livy
+	chmod 775 /var/log/livy
+	chmod 777 /var/run/livy
 	chown zeppelin:hadoop /var/run/zeppelin
 	
 	echo "[$(_timestamp)]: replacing placeholders in conf files"
@@ -173,7 +173,7 @@ _init(){
 			fi
 		done
 
-	sed -i 's|{{zookeeper-hostnames}}|'"${zookeeper_hostnames_string}"'|g' /etc/livy2/conf/livy.conf
+	sed -i 's|{{zookeeper-hostnames}}|'"${zookeeper_hostnames_string}"'|g' /etc/livy/conf/livy.conf
 
 	long_hostname=`hostname -f`
 	
@@ -185,7 +185,7 @@ _init(){
 	chown -R root: /etc/spark2/$HDP_VERSION/0/
 	chown -R spark: /etc/spark2/$HDP_VERSION/0/*
 	chown -R hive: /etc/spark2/$HDP_VERSION/0/spark-thrift-sparkconf.conf
-	sudo chown livy: /etc/livy2/conf/*
+	sudo chown livy: /etc/livy/conf/*
 	sudo chown -R zeppelin:zeppelin /usr/hdp/$HDP_VERSION/zeppelin/webapps
 	sudo chown -R zeppelin:zeppelin /etc/zeppelin
 	
@@ -193,7 +193,7 @@ _init(){
 	if [ $long_hostname == $active_namenode_hostname ]; then
 		echo "[$(_timestamp)]: in active namenode"
 		echo "[$(_timestamp)]: starting livy server"
-		eval sudo -u livy /usr/hdp/$HDP_VERSION/livy2/bin/livy-server start &
+		eval sudo -u livy /usr/hdp/$HDP_VERSION/livy/bin/livy-server start &
 		#Start Zeppelin
 		sudo -u zeppelin /usr/hdp/current/zeppelin-server/bin/zeppelin-daemon.sh start &
 		cd /usr/hdp/current/spark2-client
